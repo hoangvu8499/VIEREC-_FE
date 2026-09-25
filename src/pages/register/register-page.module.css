@@ -1,0 +1,112 @@
+.page {
+  padding-block: 24px 48px;
+  background: var(--color-surface);
+}
+
+.inner {
+  display: grid;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Cột giới thiệu (chỉ desktop). */
+.aside {
+  display: none;
+  position: sticky;
+  top: 84px;
+  overflow: hidden;
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 110% 110%, rgb(46 158 68 / 55%) 0%, transparent 45%),
+    linear-gradient(160deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-white);
+}
+
+.asideTitle {
+  margin-top: 20px;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.asideText {
+  margin-top: 12px;
+  color: rgb(255 255 255 / 85%);
+}
+
+.benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.benefits li {
+  display: flex;
+  gap: 10px;
+}
+
+.benefits svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #8fe0a0;
+}
+
+.card {
+  padding: 24px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow);
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.subtitle {
+  margin-top: 4px;
+  color: var(--color-muted);
+}
+
+.notice {
+  margin-bottom: 24px;
+}
+
+@media (min-width: 640px) {
+  .card {
+    padding: 32px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    padding-block: 40px 64px;
+  }
+
+  .inner {
+    grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .aside {
+    display: block;
+  }
+
+  .card {
+    padding: 40px;
+  }
+}

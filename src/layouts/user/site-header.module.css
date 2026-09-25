@@ -1,0 +1,65 @@
+.header {
+  background: var(--color-white);
+}
+
+.inner {
+  display: grid;
+  grid-template-areas:
+    'logo actions'
+    'search search';
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px 16px;
+  padding-block: 12px;
+}
+
+.logo {
+  grid-area: logo;
+  min-width: 0;
+}
+
+.search {
+  grid-area: search;
+}
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Màn hẹp: nút gọn lại để không đè lên logo. */
+.actions > a {
+  padding: 7px 10px;
+  font-size: 14px;
+}
+
+.language {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .actions > a {
+    padding: 10px 18px;
+    font-size: 15px;
+  }
+
+  .language {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-areas: 'logo search actions';
+    grid-template-columns: auto minmax(240px, 420px) auto;
+    justify-content: space-between;
+    gap: 24px;
+    padding-block: 14px;
+  }
+
+  .actions {
+    gap: 12px;
+  }
+}

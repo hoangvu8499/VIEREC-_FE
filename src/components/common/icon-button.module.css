@@ -1,0 +1,22 @@
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.iconButton:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.iconButton:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
