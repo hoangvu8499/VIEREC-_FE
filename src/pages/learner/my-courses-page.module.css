@@ -1,0 +1,72 @@
+.panel {
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Màn hẹp: cuộn ngang trong khung, không làm trang cuộn ngang. */
+.filters {
+  display: flex;
+  min-width: 0;
+  border: none;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 0 16px;
+  padding: 0 0 2px;
+  scrollbar-width: none;
+}
+
+.filter {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.filter:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.active,
+.active:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.loading {
+  padding: 48px 0;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list[aria-busy='true'] {
+  opacity: 0.6;
+}
+
+.pagination {
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@media (min-width: 768px) {
+  .panel {
+    padding: 24px;
+  }
+}

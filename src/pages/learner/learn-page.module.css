@@ -1,0 +1,294 @@
+.loading {
+  padding: 48px 0;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+/* ---------- Tiến độ + thi chứng chỉ ---------- */
+.progress {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.progressInfo {
+  min-width: 0;
+}
+
+.progressTitle {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.bar {
+  position: relative;
+  margin-top: 10px;
+}
+
+.meter {
+  display: block;
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  appearance: none;
+}
+
+.meter::-webkit-progress-bar {
+  background: var(--color-border);
+}
+
+.meter::-webkit-progress-value {
+  background: var(--color-secondary);
+}
+
+.meter::-moz-progress-bar {
+  background: var(--color-secondary);
+}
+
+/* Vạch mốc đủ điều kiện thi. */
+.bar i {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background: var(--color-accent-dark);
+}
+
+.progressText {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.progressText strong {
+  color: var(--color-text);
+}
+
+.exam {
+  display: grid;
+  gap: 6px;
+}
+
+.examHint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.examNotice {
+  grid-column: 1 / -1;
+}
+
+/* ---------- Bố cục bài học ---------- */
+.layout {
+  display: grid;
+  gap: 16px;
+}
+
+.lessonNav {
+  min-width: 0;
+}
+
+/* Màn hẹp: danh sách bài cuộn ngang trong khung, không làm trang cuộn ngang. */
+.lessonList {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0;
+  padding: 0 0 4px;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.lessonList li {
+  flex-shrink: 0;
+  width: 220px;
+}
+
+.lessonButton {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+  width: 100%;
+  height: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-white);
+  text-align: left;
+  cursor: pointer;
+}
+
+.lessonButton:hover {
+  border-color: var(--color-primary);
+}
+
+.current,
+.current:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.lessonNumber {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+
+.lessonTitle {
+  grid-column: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.lessonDone {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: var(--color-secondary);
+}
+
+.lesson {
+  min-width: 0;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.lessonHeading {
+  margin-top: 4px;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.videos {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.externalVideo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.instructions {
+  margin-top: 16px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.documents {
+  margin-top: 20px;
+}
+
+.documentsTitle {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.documentList {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.document {
+  display: flex;
+  text-decoration: none;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+}
+
+.document:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.documentName {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.documentSize {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.next {
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .progress {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 20px 24px;
+  }
+
+  .exam {
+    justify-items: end;
+    text-align: right;
+  }
+
+  .lesson {
+    padding: 24px;
+  }
+}
+
+/* Trong Góc học viên đã có menu bên trái → chỉ chia cột danh sách bài từ 1280px. */
+@media (min-width: 1280px) {
+  .layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .lessonNav {
+    position: sticky;
+    top: 16px;
+  }
+
+  .lessonList {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .lessonList li {
+    width: auto;
+  }
+}
