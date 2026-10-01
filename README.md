@@ -26,7 +26,7 @@ Frontend của dự án VIEREC, xây dựng bằng **React 19 + TypeScript + Vit
 ```bash
 npm install
 cp .env.example .env.development   # chỉnh lại nếu cần
-npm run dev                        # http://localhost:3000
+npm run dev                        # http://localhost:8484
 ```
 
 ## Scripts
@@ -48,13 +48,13 @@ npm run dev                        # http://localhost:3000
 
 Mọi biến dùng trong client phải có tiền tố `VITE_`. Khai báo kiểu trong `src/vite-env.d.ts`, truy cập qua `src/config/env.ts`.
 
-| Biến                    | Mô tả                                             |
-| ----------------------- | ------------------------------------------------- |
-| `VITE_APP_NAME`         | Tên ứng dụng                                      |
-| `VITE_PORT`             | Cổng dev server (mặc định 3000)                   |
-| `VITE_API_BASE_URL`     | Base URL cho Axios (mặc định `/api`)              |
-| `VITE_API_PROXY_TARGET` | Dev server proxy `/api` tới địa chỉ này (backend) |
-| `VITE_API_TIMEOUT`      | Timeout request (ms)                              |
+| Biến                    | Mô tả                                                       |
+| ----------------------- | ----------------------------------------------------------- |
+| `VITE_APP_NAME`         | Tên ứng dụng                                                |
+| `VITE_PORT`             | Cổng dev server (mặc định 8484)                             |
+| `VITE_API_BASE_URL`     | Base URL cho Axios (mặc định `/api/v1`)                     |
+| `VITE_API_PROXY_TARGET` | Proxy `/api` tới backend (mặc định `http://localhost:8383`) |
+| `VITE_API_TIMEOUT`      | Timeout request (ms)                                        |
 
 ## Cấu trúc thư mục
 
