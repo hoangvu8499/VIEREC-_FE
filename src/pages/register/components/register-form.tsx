@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { KeyRound, LoaderCircle, UserRound } from 'lucide-react'
+import { KeyRound, UserRound } from 'lucide-react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
 
@@ -9,6 +10,7 @@ import { PasswordField } from '@/components/form/password-field'
 import { TextField } from '@/components/form/text-field'
 import { ROUTES } from '@/constants/routes'
 import { registerErrorMessage, useRegister } from '@/pages/register/use-register'
+import { userApiFieldErrors, type RegisterField } from '@/schemas/user-api-errors'
 import {
   CCCD_LENGTH,
   PASSWORD_MIN_LENGTH,
@@ -27,6 +29,19 @@ interface RegisterFormProps {
   onSuccess: (user: User) => void
 }
 
+/** Thứ tự ô trên form — lỗi server đầu tiên theo thứ tự này được focus. */
+const FIELD_ORDER: RegisterField[] = [
+  'lastName',
+  'firstName',
+  'dateOfBirth',
+  'cccd',
+  'phoneNumber',
+  'email',
+  'address',
+  'username',
+  'password',
+]
+
 function todayIso(): string {
   const now = new Date()
   const pad = (value: number) => String(value).padStart(2, '0')
@@ -39,6 +54,8 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     handleSubmit,
     getValues,
     trigger,
+    setError,
+    setFocus,
     formState: { errors },
   } = useForm<RegisterFormInput, unknown, RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -46,6 +63,21 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     defaultValues: REGISTER_DEFAULT_VALUES,
   })
   const registerMutation = useRegister()
+
+  const serverFieldErrors = useMemo(
+    () => (registerMutation.error ? userApiFieldErrors(registerMutation.error) : {}),
+    [registerMutation.error],
+  )
+
+  // Gắn lỗi backend (400 theo field / 409 trùng dữ liệu) vào đúng ô. Chạy sau render
+  // để fieldset đã hết `disabled` thì mới focus được.
+  useEffect(() => {
+    const fields = FIELD_ORDER.filter((field) => serverFieldErrors[field])
+    for (const field of fields) {
+      setError(field, { type: 'server', message: serverFieldErrors[field] })
+    }
+    if (fields[0]) setFocus(fields[0])
+  }, [serverFieldErrors, setError, setFocus])
 
   const onSubmit = handleSubmit((values) => {
     registerMutation.mutate(toRegisterPayload(values), { onSuccess })
@@ -57,7 +89,10 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     <form className={styles.form} onSubmit={onSubmit} noValidate>
       {registerMutation.isError && (
         <Alert variant="error" title="Đăng ký không thành công">
-          {registerErrorMessage(registerMutation.error)}
+          {registerErrorMessage(
+            registerMutation.error,
+            FIELD_ORDER.flatMap((field) => serverFieldErrors[field] ?? []),
+          )}
         </Alert>
       )}
 
@@ -172,8 +207,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       </fieldset>
 
       <div className={styles.footer}>
-        <Button type="submit" variant="accent" size="lg" block disabled={isSubmitting}>
-          {isSubmitting && <LoaderCircle className={styles.spinner} size={20} aria-hidden />}
+        <Button type="submit" variant="accent" size="lg" block loading={isSubmitting}>
           {isSubmitting ? 'Đang đăng ký...' : 'Đăng ký'}
         </Button>
         <p className={styles.loginLink}>

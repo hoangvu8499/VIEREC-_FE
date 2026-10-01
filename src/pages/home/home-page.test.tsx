@@ -1,18 +1,67 @@
-import { render, screen, within } from '@testing-library/react'
-import { MemoryRouter } from 'react-router'
+import { screen, within } from '@testing-library/react'
 
+import { ROUTES } from '@/constants/routes'
 import HomePage from '@/pages/home/home-page'
 import { CATEGORIES, NEWS, PARTNERS } from '@/pages/home/home-data'
+import { courseService } from '@/services/course-service'
+import { COURSE_FIXTURE, coursePage } from '@/test/fixtures'
+import { renderRoutes } from '@/test/render-routes'
+import type { Course } from '@/types/course'
 
 function renderHome() {
-  return render(
-    <MemoryRouter>
-      <HomePage />
-    </MemoryRouter>,
-  )
+  return renderRoutes([{ path: ROUTES.HOME, element: <HomePage /> }], ROUTES.HOME)
+}
+
+function courses(count: number): Course[] {
+  return Array.from({ length: count }, (_, index) => ({
+    ...COURSE_FIXTURE,
+    id: index + 1,
+    name: `Khoá học số ${index + 1}`,
+  }))
 }
 
 describe('HomePage', () => {
+  beforeEach(() => {
+    vi.spyOn(courseService, 'list').mockResolvedValue(coursePage(courses(8), 0, 8))
+  })
+
+  afterEach(() => vi.restoreAllMocks())
+
+  it('shows the 6 newest published courses with a link to all', async () => {
+    renderHome()
+
+    const section = await screen.findByRole('region', {
+      name: 'Bắt đầu hành trình an toàn của bạn',
+    })
+    expect(await within(section).findAllByRole('article')).toHaveLength(6)
+    expect(courseService.list).toHaveBeenCalledWith({
+      page: 0,
+      keyword: undefined,
+      status: 'PUBLISHED',
+    })
+    expect(within(section).getByRole('link', { name: 'Khoá học số 1' })).toHaveAttribute(
+      'href',
+      '/khoa-hoc/1',
+    )
+    expect(within(section).getByRole('link', { name: /Xem tất cả khoá học/ })).toHaveAttribute(
+      'href',
+      ROUTES.COURSES,
+    )
+  })
+
+  it('hides the course section when there is no published course', async () => {
+    vi.mocked(courseService.list).mockResolvedValue(coursePage([]))
+    renderHome()
+
+    // Đang tải thì khối vẫn hiện (chữ "Đang tải"), có kết quả rỗng thì ẩn hẳn.
+    await vi.waitFor(() =>
+      expect(
+        screen.queryByRole('region', { name: 'Bắt đầu hành trình an toàn của bạn' }),
+      ).not.toBeInTheDocument(),
+    )
+    expect(courseService.list).toHaveBeenCalled()
+  })
+
   it('renders the hero heading and sets document title', () => {
     renderHome()
 

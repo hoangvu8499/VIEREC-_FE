@@ -8,6 +8,7 @@ import { useDocumentTitle } from '@/hooks/use-document-title'
 import { RegisterForm } from '@/pages/register/components/register-form'
 import { RegisterSuccess } from '@/pages/register/components/register-success'
 import type { User } from '@/types/user'
+import { userFullName } from '@/utils/user-full-name'
 
 import styles from './register-page.module.css'
 
@@ -47,9 +48,7 @@ export default function RegisterPage() {
           </header>
 
           {registeredUser ? (
-            <RegisterSuccess
-              fullName={`${registeredUser.last_name} ${registeredUser.first_name}`.trim()}
-            />
+            <RegisterSuccess fullName={userFullName(registeredUser)} />
           ) : (
             <>
               <Alert variant="warning" title="Lưu ý quan trọng" className={styles.notice}>

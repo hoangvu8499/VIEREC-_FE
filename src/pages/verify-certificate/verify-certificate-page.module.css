@@ -1,0 +1,146 @@
+.page {
+  padding-bottom: 56px;
+  background: var(--color-surface);
+}
+
+.hero {
+  padding: 36px 0 88px;
+  background:
+    radial-gradient(circle at 90% 110%, rgb(46 158 68 / 55%) 0%, transparent 45%),
+    linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-white);
+}
+
+.heroInner {
+  max-width: 720px;
+  text-align: center;
+}
+
+.heroIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 15%);
+}
+
+.title {
+  margin-top: 12px;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.subtitle {
+  margin-top: 8px;
+  color: rgb(255 255 255 / 85%);
+}
+
+.content {
+  position: relative;
+  display: grid;
+  gap: 20px;
+  max-width: 720px;
+  margin-top: -56px;
+}
+
+.search {
+  display: block;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow);
+}
+
+.searchForm {
+  display: grid;
+  gap: 12px;
+}
+
+.searchButton {
+  height: 44px;
+}
+
+.loading {
+  padding: 32px 0;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.result {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+}
+
+/* ---------- Kết quả hợp lệ ---------- */
+.valid {
+  padding: 20px;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--color-secondary-soft) 0%, var(--color-white) 70%);
+}
+
+.validTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-secondary-dark);
+}
+
+.validText {
+  margin-top: 4px;
+  color: var(--color-muted);
+}
+
+.facts {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 0;
+}
+
+.facts dt {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.facts dd {
+  margin: 2px 0 0;
+  font-size: 16px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.code {
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  color: var(--color-primary);
+}
+
+@media (min-width: 640px) {
+  .searchForm {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 48px 0 96px;
+  }
+
+  .title {
+    font-size: 34px;
+  }
+
+  .search,
+  .valid {
+    padding: 24px;
+  }
+}
