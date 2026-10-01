@@ -60,13 +60,15 @@
   .title {
     font-size: 20px;
   }
+}
 
+@media (min-width: 768px) {
   .subtitle {
     display: block;
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .mark {
     --size: 68px;
   }

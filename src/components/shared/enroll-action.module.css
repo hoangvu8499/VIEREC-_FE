@@ -1,0 +1,50 @@
+.action {
+  display: grid;
+  gap: 10px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--color-primary-soft);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.completed {
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary-dark);
+}
+
+.pending {
+  background: var(--color-surface);
+  color: var(--color-accent-dark);
+}
+
+.hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.cancel {
+  justify-self: center;
+  color: var(--color-muted);
+}
+
+/* Trong thẻ khoá học: nổi trên lớp link phủ cả thẻ. */
+.card {
+  position: relative;
+  z-index: 3;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.card .status {
+  padding: 6px 10px;
+  font-size: 13px;
+}

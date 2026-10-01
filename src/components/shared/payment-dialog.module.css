@@ -1,0 +1,72 @@
+.body {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+
+.body p {
+  margin: 0;
+}
+
+.qr {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.details {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  font-size: 14px;
+  text-align: left;
+}
+
+.details > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 32px;
+}
+
+.details dt {
+  flex-shrink: 0;
+  color: var(--color-muted);
+}
+
+.details dd {
+  min-width: 0;
+  margin: 0;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.value {
+  user-select: all;
+}
+
+.note {
+  font-size: 13px;
+  color: var(--color-muted);
+  text-align: left;
+}
+
+.note a {
+  font-weight: 700;
+  color: var(--color-primary);
+}

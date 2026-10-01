@@ -31,4 +31,12 @@ describe('Button', () => {
     expect(button.className).toMatch(/lg/)
     expect(button).toHaveClass('extra')
   })
+
+  it('disables itself while loading', () => {
+    render(<Button loading>Save</Button>)
+
+    const button = screen.getByRole('button', { name: 'Save' })
+    expect(button).toBeDisabled()
+    expect(button).toHaveAttribute('aria-busy', 'true')
+  })
 })

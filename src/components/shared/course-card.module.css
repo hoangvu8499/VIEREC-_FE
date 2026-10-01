@@ -1,0 +1,212 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-border));
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Ảnh bìa (placeholder theo lĩnh vực, chưa có ảnh thật) ---------- */
+.cover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 148px;
+  overflow: hidden;
+  color: var(--color-white);
+}
+
+/* Hai vòng tròn mờ trang trí. */
+.cover::before,
+.cover::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 12%);
+}
+
+.cover::before {
+  top: -40px;
+  right: -30px;
+  width: 140px;
+  height: 140px;
+}
+
+.cover::after {
+  bottom: -60px;
+  left: -20px;
+  width: 160px;
+  height: 160px;
+}
+
+.primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+}
+
+.secondary {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+}
+
+.accent {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+}
+
+.danger {
+  background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger-dark) 100%);
+}
+
+.coverIcon {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 4px 10px rgb(0 0 0 / 20%));
+  transition: transform 0.3s;
+}
+
+.card:hover .coverIcon {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.field {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 92%);
+  color: var(--color-text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ---------- Nội dung ---------- */
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 16px 18px 18px;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.link {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/* Cả thẻ bấm được. */
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
+.card:has(.link:focus-visible) {
+  outline: 3px solid color-mix(in srgb, var(--color-primary) 45%, transparent);
+  outline-offset: 2px;
+}
+
+.card:hover .link {
+  color: var(--color-primary);
+}
+
+.description {
+  display: -webkit-box;
+  flex: 1;
+  margin-top: 8px;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-muted);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 14px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px dashed var(--color-border);
+  list-style: none;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.meta li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.meta svg {
+  color: var(--color-primary);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.more svg {
+  transition: transform 0.2s;
+}
+
+.card:hover .more svg {
+  transform: translateX(4px);
+}
+
+/* ---------- Trạng thái ghi danh (góc phải ảnh bìa) ---------- */
+.enrollment {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.done {
+  background: var(--color-secondary);
+}
+
+.pending {
+  background: var(--color-accent-dark);
+}
