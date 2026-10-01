@@ -1,0 +1,16 @@
+.panel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.padded {
+  padding: 20px 16px;
+}
+
+@media (min-width: 768px) {
+  .padded {
+    padding: 28px 32px;
+  }
+}

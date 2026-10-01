@@ -37,7 +37,7 @@ export function MainNav() {
                 className={({ isActive }) => cn(styles.link, isActive && styles.active)}
                 onClick={() => setIsOpen(false)}
               >
-                {Icon && <Icon size={18} aria-hidden />}
+                {Icon && <Icon className={styles.linkIcon} size={18} aria-hidden />}
                 {label}
               </NavLink>
             </li>

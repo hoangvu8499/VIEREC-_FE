@@ -1,8 +1,10 @@
-import { Globe, Mail, Phone } from 'lucide-react'
+import { Globe, Mail, Phone, ShieldCheck } from 'lucide-react'
+import { Link } from 'react-router'
 
 import { Container } from '@/components/common/container'
 import { FacebookIcon, LinkedinIcon, YoutubeIcon } from '@/components/icons/social-icons'
 import { CONTACT, SLOGAN } from '@/constants/contact'
+import { ROUTES } from '@/constants/routes'
 
 import styles from './site-footer.module.css'
 
@@ -33,6 +35,11 @@ export function SiteFooter() {
             <a className={styles.contact} href={CONTACT.WEBSITE}>
               <Globe size={16} aria-hidden /> {CONTACT.WEBSITE}
             </a>
+          </li>
+          <li>
+            <Link className={styles.contact} to={ROUTES.VERIFY_CERTIFICATE}>
+              <ShieldCheck size={16} aria-hidden /> Tra cứu chứng chỉ
+            </Link>
           </li>
         </ul>
 

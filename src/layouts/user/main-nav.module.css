@@ -54,7 +54,7 @@
   font-weight: 700;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .bar {
     flex-wrap: nowrap;
     min-height: 60px;
@@ -65,31 +65,69 @@
     display: none;
   }
 
+  /* Các mục chia đều chiều ngang còn lại, nút báo sự cố ở cuối. */
   .list {
     display: flex;
+    flex: 1;
     flex-direction: row;
     align-self: stretch;
     order: 0;
     width: auto;
-    gap: 2px;
+  }
+
+  .list > li {
+    position: relative;
+    flex: 1 1 auto;
+  }
+
+  /* Vạch ngăn mảnh giữa các mục. */
+  .list > li + li::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 1px;
+    height: 20px;
+    background: rgb(255 255 255 / 18%);
+    translate: 0 -50%;
   }
 
   .link {
     position: relative;
+    justify-content: center;
     height: 100%;
-    padding: 0 10px;
+    padding: 0 12px;
     border-radius: 0;
     font-size: 14px;
+  }
+
+  .linkIcon {
+    display: none;
   }
 
   .active::after {
     content: '';
     position: absolute;
-    right: 6px;
+    right: 20%;
     bottom: 0;
-    left: 6px;
+    left: 20%;
     height: 4px;
     border-radius: 4px 4px 0 0;
     background: var(--color-accent);
+  }
+}
+
+@media (min-width: 1280px) {
+  .bar {
+    gap: 24px;
+  }
+
+  .link {
+    font-size: 15px;
+  }
+
+  /* 6 mục + nút báo sự cố chỉ đủ chỗ cho icon từ 1280px. */
+  .linkIcon {
+    display: inline;
   }
 }

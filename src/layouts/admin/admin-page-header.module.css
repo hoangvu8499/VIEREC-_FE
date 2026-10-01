@@ -1,0 +1,45 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.back:hover {
+  color: var(--color-primary);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.description {
+  margin-top: 4px;
+  color: var(--color-muted);
+}
+
+.action {
+  display: flex;
+  gap: 8px;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
+}

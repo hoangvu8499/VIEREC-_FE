@@ -1,0 +1,29 @@
+.card {
+  padding-bottom: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.features {
+  display: grid;
+  gap: 10px;
+  width: fit-content;
+  max-width: calc(100% - 32px);
+  margin: -24px auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.features li {
+  display: flex;
+  gap: 10px;
+  color: var(--color-text);
+}
+
+.features svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--color-secondary);
+}
