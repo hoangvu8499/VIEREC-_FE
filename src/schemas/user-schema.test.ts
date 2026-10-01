@@ -99,18 +99,18 @@ describe('registerSchema', () => {
     )
   })
 
-  it('maps form values to snake_case payload with trimmed text', () => {
+  it('maps form values to the camelCase payload (without confirmPassword), trimmed', () => {
     const values = registerSchema.parse({ ...VALID, username: '  nguyenvana  ' })
 
     expect(toRegisterPayload(values)).toEqual({
       username: 'nguyenvana',
       password: 'Matkhau@123',
-      first_name: 'An',
-      last_name: 'Nguyễn Văn',
+      firstName: 'An',
+      lastName: 'Nguyễn Văn',
       cccd: '001099012345',
-      date_of_birth: '1995-06-15',
+      dateOfBirth: '1995-06-15',
       address: '12 Láng Hạ, Đống Đa, Hà Nội',
-      phone_number: '0912345678',
+      phoneNumber: '0912345678',
       email: 'an.nguyen@example.com',
     })
   })
