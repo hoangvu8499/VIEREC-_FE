@@ -1,0 +1,301 @@
+.flash {
+  margin-bottom: 20px;
+}
+
+.flash a {
+  font-weight: 600;
+}
+
+/* ---------- Bộ lọc ---------- */
+.filters {
+  display: block;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.filterForm {
+  display: grid;
+  gap: 12px;
+}
+
+.filterActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.loading {
+  padding: 48px 16px;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+/* ---------- Bảng: màn hẹp là thẻ, từ 1280px là bảng (vùng nội dung admin mới đủ rộng) ---------- */
+.tableWrap {
+  overflow-x: auto;
+  transition: opacity 0.15s;
+}
+
+.fetching {
+  opacity: 0.55;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  display: none;
+}
+
+.table tbody,
+.table tr,
+.table th,
+.table td {
+  display: block;
+}
+
+.table tbody tr {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table tbody td {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+/* Nhãn cột hiện trước giá trị trên thẻ. */
+.table tbody td[data-label]::before {
+  content: attr(data-label);
+  flex: 0 0 96px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.table .courseCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.courseName {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.courseName:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.courseDescription {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 14px;
+  color: var(--color-muted);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* Thẻ: nhãn bên trái, tên và @username xếp 2 dòng bên phải. */
+.table tbody .instructorCell {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 0 12px;
+}
+
+.table tbody .instructorCell::before {
+  grid-row: span 2;
+}
+
+.instructor {
+  font-weight: 600;
+}
+
+.subtle {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.courseLink {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* Nội dung chuyển khoản: bấm một lần chọn hết để dán vào ô tìm sao kê. */
+.transfer {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  user-select: all;
+}
+
+.actionsCell {
+  margin-top: 10px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  color: var(--color-primary);
+}
+
+.actionButton:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.actionButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.danger {
+  color: var(--color-danger);
+}
+
+.danger:hover {
+  border-color: var(--color-danger);
+  background: #fdecec;
+}
+
+/* ---------- Chân bảng ---------- */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+}
+
+.summary {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .filterForm {
+    grid-template-columns: minmax(0, 1fr) 220px auto;
+    align-items: end;
+  }
+
+  .filterForm.keywordOnly {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .footer {
+    padding: 16px 20px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .table thead {
+    display: table-header-group;
+  }
+
+  .table tbody {
+    display: table-row-group;
+  }
+
+  .table tr {
+    display: table-row;
+  }
+
+  .table th,
+  .table td,
+  .table tbody td {
+    display: table-cell;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+    text-align: left;
+  }
+
+  .table tbody tr {
+    padding: 0;
+    border: none;
+  }
+
+  .table tbody tr:hover {
+    background: var(--color-surface);
+  }
+
+  .table tbody td[data-label]::before {
+    content: none;
+  }
+
+  .table thead th {
+    background: var(--color-surface);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  .table .courseCell {
+    display: table-cell;
+    min-width: 240px;
+    margin: 0;
+  }
+
+  .courseName {
+    display: block;
+  }
+
+  .courseDescription {
+    margin-top: 2px;
+  }
+
+  .table tbody .instructorCell {
+    display: table-cell;
+  }
+
+  .instructor,
+  .instructorCell .subtle {
+    display: block;
+  }
+
+  .instructor {
+    white-space: nowrap;
+  }
+
+  .table .numberCell {
+    text-align: center;
+  }
+
+  .table .actionsHead {
+    text-align: right;
+  }
+
+  .actionsCell {
+    margin: 0;
+  }
+
+  .actions {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+}

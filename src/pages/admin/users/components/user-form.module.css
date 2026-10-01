@@ -1,0 +1,131 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 880px;
+}
+
+.requiredNote {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.requiredNote span,
+.required {
+  color: var(--color-danger);
+}
+
+.fieldset {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.readonly {
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.readonly strong {
+  color: var(--color-text);
+}
+
+/* ---------- Vai trò ---------- */
+.rolePicker {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.roleLegend {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.roleList {
+  display: grid;
+  gap: 10px;
+}
+
+.roleOption {
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-white);
+}
+
+.roleOption:has(input:checked) {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.roleOption:has(input:disabled) {
+  opacity: 0.7;
+}
+
+.rolePicker[aria-invalid='true'] .roleOption {
+  border-color: var(--color-danger);
+}
+
+.note {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--color-danger);
+}
+
+.error svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+@media (min-width: 640px) {
+  .fieldset {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 16px;
+  }
+
+  .roleList:not(.roleStack) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

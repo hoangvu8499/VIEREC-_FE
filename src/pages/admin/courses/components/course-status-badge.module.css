@@ -1,0 +1,44 @@
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.DRAFT {
+  background: #fff4e5;
+  color: var(--color-accent-dark);
+}
+
+.PUBLISHED {
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary-dark);
+}
+
+.ARCHIVED {
+  background: #eef1f5;
+  color: var(--color-muted);
+}
+
+/* Trạng thái ghi danh */
+.PENDING {
+  background: var(--color-surface);
+  color: var(--color-accent-dark);
+}
+
+.ENROLLED {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.COMPLETED {
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary-dark);
+}
+
+.CANCELLED {
+  background: #eef1f5;
+  color: var(--color-muted);
+}

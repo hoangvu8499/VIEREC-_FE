@@ -1,0 +1,143 @@
+.flash {
+  margin-bottom: 20px;
+}
+
+.loading {
+  padding: 48px 16px;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.deleteButton {
+  color: var(--color-danger);
+}
+
+.layout {
+  display: grid;
+  gap: 20px;
+  align-items: start;
+}
+
+.card {
+  min-width: 0;
+  padding: 20px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.cardTitle svg {
+  color: var(--color-primary);
+}
+
+/* ---------- Hồ sơ ---------- */
+.profile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: var(--color-white);
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.profileText {
+  display: grid;
+  gap: 6px;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.username {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.info {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 0;
+}
+
+.info > div {
+  display: grid;
+  gap: 2px;
+}
+
+.info dt {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.info dd {
+  margin: 0;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.muted {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+/* ---------- Vai trò ---------- */
+.rolesForm {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.rolesActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.rolesView {
+  margin-top: 14px;
+}
+
+@media (min-width: 640px) {
+  .info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+  }
+}

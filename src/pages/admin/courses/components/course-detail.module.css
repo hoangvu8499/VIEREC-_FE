@@ -1,0 +1,265 @@
+.flash {
+  margin-bottom: 20px;
+}
+
+.loading {
+  padding: 48px 16px;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.deleteButton {
+  color: var(--color-danger);
+}
+
+.layout {
+  display: grid;
+  gap: 20px;
+  align-items: start;
+}
+
+.main {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+
+.card {
+  min-width: 0;
+  padding: 20px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.count {
+  padding: 1px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary-soft);
+  font-size: 13px;
+  color: var(--color-primary);
+}
+
+.description,
+.instructions {
+  margin-top: 10px;
+  color: var(--color-text);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+/* ---------- Thông tin ---------- */
+.info {
+  display: grid;
+  gap: 14px;
+  margin: 16px 0 0;
+}
+
+.info > div {
+  display: grid;
+  gap: 4px;
+}
+
+.info dt {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.info dd {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  font-size: 15px;
+}
+
+.muted {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+/* ---------- Bài học ---------- */
+.lessons {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lesson {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.order {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.lessonBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.lessonHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lessonTitle {
+  padding-top: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.lessonActions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+.iconAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  color: var(--color-primary);
+}
+
+.iconAction:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.iconAction:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.danger {
+  color: var(--color-danger);
+}
+
+.danger:hover {
+  border-color: var(--color-danger);
+  background: #fdecec;
+}
+
+.instructions {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.file {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.file:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.file > svg:first-child {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.fileName {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fileSize {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.player {
+  margin-top: 12px;
+}
+
+.player summary {
+  width: fit-content;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.player video {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  margin-top: 10px;
+  border-radius: var(--radius);
+  background: #000;
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+}
