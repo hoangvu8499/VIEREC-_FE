@@ -5,6 +5,9 @@ import type {
   EnrollmentAdminSearchParams,
   EnrollmentSearchParams,
   EnrollmentStatus,
+  MonthlyRevenue,
+  MonthlyRevenueParams,
+  RevenueSummary,
 } from '@/types/course'
 
 export const enrollmentService = {
@@ -42,6 +45,20 @@ export const enrollmentService = {
   /** SUPER_ADMIN / ADMIN. Lượt đăng ký của mọi khoá, vd. `status: 'PENDING'` cho hàng chờ duyệt. */
   async search(params: EnrollmentAdminSearchParams = {}): Promise<PageResponse<Enrollment>> {
     const { data } = await http.get<ApiResponse<PageResponse<Enrollment>>>('/enrollments', {
+      params,
+    })
+    return data.data
+  },
+
+  /** SUPER_ADMIN / ADMIN. Tổng học phí các lượt đã duyệt trong tuần (từ thứ Hai), tháng, năm hiện tại. */
+  async revenue(): Promise<RevenueSummary> {
+    const { data } = await http.get<ApiResponse<RevenueSummary>>('/enrollments/revenue')
+    return data.data
+  },
+
+  /** SUPER_ADMIN / ADMIN. Doanh thu một tháng: tổng, theo khoá và từng khoản thu (ai trả, bao nhiêu). */
+  async monthlyRevenue(params: MonthlyRevenueParams = {}): Promise<MonthlyRevenue> {
+    const { data } = await http.get<ApiResponse<MonthlyRevenue>>('/enrollments/revenue/monthly', {
       params,
     })
     return data.data

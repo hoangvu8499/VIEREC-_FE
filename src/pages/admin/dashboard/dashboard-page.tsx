@@ -1,5 +1,15 @@
 import type { UseQueryResult } from '@tanstack/react-query'
-import { ArrowRight, Hourglass, UserCheck, Users } from 'lucide-react'
+import {
+  ArrowRight,
+  CalendarDays,
+  CalendarRange,
+  Hourglass,
+  type LucideIcon,
+  UserCheck,
+  Users,
+  Wallet,
+} from 'lucide-react'
+import { Fragment } from 'react'
 import { Link } from 'react-router'
 
 import { StatCard } from '@/components/common/stat-card'
@@ -8,6 +18,8 @@ import { ADMIN_ROUTES } from '@/constants/routes'
 import { useDocumentTitle } from '@/hooks/use-document-title'
 import { useDashboardStats } from '@/pages/admin/dashboard/use-dashboard-stats'
 import { useAuthStore } from '@/stores/auth-store'
+import type { RevenueSummary } from '@/types/course'
+import { formatVnd } from '@/utils/format-currency'
 import { hasAnyRole, primaryRoleLabel } from '@/utils/user-roles'
 import { userFullName } from '@/utils/user-full-name'
 
@@ -22,6 +34,20 @@ const todayFormatter = new Intl.DateTimeFormat('vi-VN', {
 
 const numberFormatter = new Intl.NumberFormat('vi-VN')
 
+const dayMonthFormatter = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit' })
+
+const REVENUE_PERIODS: { key: keyof RevenueSummary; label: string; icon: LucideIcon }[] = [
+  { key: 'week', label: 'Tuần này', icon: Wallet },
+  { key: 'month', label: 'Tháng này', icon: CalendarDays },
+  { key: 'year', label: 'Năm nay', icon: CalendarRange },
+]
+
+/** `2026-09-28` → `28/09` (ngày theo lịch, không qua múi giờ). */
+function dayMonth(isoDate: string): string {
+  const [year, month, day] = isoDate.split('-').map(Number)
+  return dayMonthFormatter.format(new Date(year ?? 0, (month ?? 1) - 1, day ?? 1))
+}
+
 /** Đang tải: "…", lỗi: "—". */
 function statValue(query: UseQueryResult<number>): string {
   if (query.isPending) return '…'
@@ -32,7 +58,7 @@ function statValue(query: UseQueryResult<number>): string {
 export default function DashboardPage() {
   useDocumentTitle('Tổng quan – Quản trị')
   const user = useAuthStore((state) => state.user)
-  const { totalUsers, activeUsers, pendingEnrollments } = useDashboardStats()
+  const { totalUsers, activeUsers, pendingEnrollments, revenue } = useDashboardStats()
 
   const modules = ADMIN_NAV.filter(
     (item) => item.path !== ADMIN_ROUTES.DASHBOARD && (!item.roles || hasAnyRole(user, item.roles)),
@@ -81,6 +107,45 @@ export default function DashboardPage() {
         {statsFailed && (
           <p className={styles.statsError}>
             Không tải được số liệu. Vui lòng tải lại trang sau ít phút.
+          </p>
+        )}
+      </section>
+
+      <section aria-labelledby="revenue-title">
+        <h2 id="revenue-title" className={styles.sectionTitle}>
+          Doanh thu
+        </h2>
+        <p className={styles.sectionNote}>
+          Tổng học phí của các lượt đăng ký đã duyệt, tính theo ngày duyệt. Tuần tính từ thứ Hai.
+        </p>
+        <div className={styles.stats}>
+          {REVENUE_PERIODS.map(({ key, label, icon }) => {
+            const period = revenue.data?.[key]
+            const card = (
+              <StatCard
+                variant="card"
+                icon={icon}
+                value={revenue.isPending ? '…' : period ? formatVnd(period.amount) : '—'}
+                label={
+                  period
+                    ? `${label} (từ ${dayMonth(period.from)}) · ${numberFormatter.format(period.enrollments)} lượt`
+                    : label
+                }
+              />
+            )
+            // Chi tiết từng khoản thu xem theo tháng.
+            return key === 'month' ? (
+              <Link key={key} to={ADMIN_ROUTES.REVENUE} className={styles.statLink}>
+                {card}
+              </Link>
+            ) : (
+              <Fragment key={key}>{card}</Fragment>
+            )
+          })}
+        </div>
+        {revenue.isError && (
+          <p className={styles.statsError}>
+            Không tải được doanh thu. Vui lòng tải lại trang sau ít phút.
           </p>
         )}
       </section>

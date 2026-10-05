@@ -10,7 +10,7 @@ import { LEARNER_ROUTES } from '@/constants/routes'
 import { useDocumentTitle } from '@/hooks/use-document-title'
 import { useMyEnrollments } from '@/hooks/use-enrollments'
 import { EnrollmentItem } from '@/pages/learner/components/enrollment-item'
-import { LearnerPageHeader } from '@/pages/learner/components/learner-page-header'
+import { AccountPageHeader } from '@/layouts/user/account-page-header'
 import type { EnrollmentStatus } from '@/types/course'
 import { apiErrorMessage } from '@/utils/api-error-message'
 import { cn } from '@/utils/cn'
@@ -72,7 +72,7 @@ export default function MyCoursesPage() {
 
   return (
     <>
-      <LearnerPageHeader
+      <AccountPageHeader
         title="Khoá học của tôi"
         description="Các khoá bạn đã đăng ký: chờ duyệt, đang học và đã hoàn thành."
         action={

@@ -14,6 +14,8 @@ import styles from './require-role.module.css'
 interface RequireRoleProps {
   /** Bỏ trống = chỉ cần đăng nhập. */
   roles?: readonly string[]
+  /** Lời giải thích khi đăng nhập rồi nhưng không đủ quyền. */
+  forbiddenDescription?: string
   children: ReactNode
 }
 
@@ -21,7 +23,11 @@ interface RequireRoleProps {
  * Chặn route theo đăng nhập / role. Chưa đăng nhập → trang đăng nhập (quay lại sau khi login).
  * Chỉ là lớp UI — backend vẫn kiểm tra quyền ở từng API.
  */
-export function RequireRole({ roles, children }: RequireRoleProps) {
+export function RequireRole({
+  roles,
+  forbiddenDescription = 'Khu vực này chỉ dành cho quản trị viên. Nếu bạn cần quyền truy cập, hãy liên hệ quản trị viên hệ thống.',
+  children,
+}: RequireRoleProps) {
   const user = useAuthStore((state) => state.user)
   const location = useLocation()
 
@@ -44,7 +50,7 @@ export function RequireRole({ roles, children }: RequireRoleProps) {
           icon={ShieldX}
           tone="danger"
           title="Bạn không có quyền truy cập trang này"
-          description="Khu vực này chỉ dành cho quản trị viên. Nếu bạn cần quyền truy cập, hãy liên hệ quản trị viên hệ thống."
+          description={forbiddenDescription}
           action={
             <ButtonLink to={ROUTES.HOME} variant="primary">
               Về trang chủ

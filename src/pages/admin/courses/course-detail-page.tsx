@@ -1,4 +1,4 @@
-import { Pencil, Trash2, Users } from 'lucide-react'
+import { ClipboardCheck, Pencil, Trash2, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
@@ -19,6 +19,7 @@ import {
   useDeleteLesson,
 } from '@/pages/admin/courses/use-course-mutations'
 import type { CourseFlashState, Lesson } from '@/types/course'
+import { formatVnd } from '@/utils/format-currency'
 import { formatDateTime } from '@/utils/format-date-time'
 
 import styles from './components/course-detail.module.css'
@@ -61,6 +62,9 @@ export default function CourseDetailPage() {
                 variant="outline"
               >
                 <Users size={18} aria-hidden /> Học viên
+              </ButtonLink>
+              <ButtonLink to={adminCoursePath('COURSE_EXAM', course.data.id)} variant="outline">
+                <ClipboardCheck size={18} aria-hidden /> Bài thi
               </ButtonLink>
               <ButtonLink to={adminCoursePath('COURSE_EDIT', course.data.id)} variant="outline">
                 <Pencil size={18} aria-hidden /> Sửa khoá học
@@ -106,6 +110,10 @@ export default function CourseDetailPage() {
                     <strong>{data.instructorName}</strong>
                     <span className={styles.muted}>@{data.instructorUsername}</span>
                   </dd>
+                </div>
+                <div>
+                  <dt>Học phí</dt>
+                  <dd>{formatVnd(data.price)}</dd>
                 </div>
                 <div>
                   <dt>Người tạo</dt>

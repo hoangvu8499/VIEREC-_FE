@@ -14,9 +14,9 @@ export function EnrollmentPayments({ enrollment }: { enrollment: Enrollment }) {
   return (
     <div className={styles.box}>
       <p>
-        Nội dung chuyển khoản cần tìm trong sao kê:{' '}
+        Cần tìm trong sao kê khoản <strong>{formatVnd(enrollment.price)}</strong> với nội dung{' '}
         <strong className={styles.code}>
-          {transferContent(enrollment.username, enrollment.courseId)}
+          {transferContent(enrollment.courseId, enrollment.userId)}
         </strong>
       </p>
       {payments.isPending ? (

@@ -32,6 +32,9 @@ export interface User {
   email: string
   status: UserStatus
   roles: UserRole[]
+  /** Doanh nghiệp của học viên / người quản lý; `null` (hoặc thiếu) = học viên tự do. */
+  businessId?: number | null
+  businessName?: string | null
   /** ISO 8601, giờ server (không kèm múi giờ). */
   createdAt: string
   updatedAt: string

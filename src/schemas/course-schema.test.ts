@@ -17,7 +17,6 @@ const VALID_LESSON = {
   instructions: 'Đọc tài liệu',
   sortOrder: ' 3 ',
   documentFile: fileOf('bai-1.PDF'),
-  videoFile: fileOf('bai-1.mp4'),
   videoUrl: '',
   removeVideo: false,
 }
@@ -39,7 +38,23 @@ describe('courseSchema', () => {
       COURSE_FIELD_MESSAGES.name.required,
       COURSE_FIELD_MESSAGES.description.required,
       COURSE_FIELD_MESSAGES.instructorId.required,
+      COURSE_FIELD_MESSAGES.price.required,
     ])
+  })
+
+  it('reads the price with or without thousands separators', () => {
+    const base = { name: 'PCCC', description: 'Mô tả', instructorId: 3, status: 'DRAFT' }
+    expect(courseSchema.parse({ ...base, price: ' 1.500.000 ' }).price).toBe(1_500_000)
+    expect(courseSchema.parse({ ...base, price: '100000' }).price).toBe(100_000)
+    for (const price of ['', '999', '12,5', 'abc', '1000000001']) {
+      const result = courseSchema.safeParse({ ...base, price })
+      expect({ price, messages: result.error?.issues.map((issue) => issue.message) }).toEqual({
+        price,
+        messages: [
+          price === '' ? COURSE_FIELD_MESSAGES.price.required : COURSE_FIELD_MESSAGES.price.invalid,
+        ],
+      })
+    }
   })
 
   it('trims text', () => {
@@ -47,12 +62,14 @@ describe('courseSchema', () => {
       name: '  PCCC  ',
       description: ' Mô tả ',
       instructorId: 3,
+      price: '100000',
       status: 'PUBLISHED',
     })
     expect(result).toEqual({
       name: 'PCCC',
       description: 'Mô tả',
       instructorId: 3,
+      price: 100000,
       status: 'PUBLISHED',
     })
   })
@@ -75,17 +92,24 @@ describe('lessonSchema', () => {
     expect(lessonErrors({ sortOrder }).sortOrder).toBe(message)
   })
 
-  it('requires only the document; the video (file or link) is optional', () => {
-    const errors = lessonErrors({ documentFile: undefined, videoFile: undefined })
+  it('requires only the document; the video link is optional', () => {
+    const errors = lessonErrors({ documentFile: undefined, videoUrl: '' })
     expect(errors.documentFile).toBe(LESSON_FIELD_MESSAGES.documentFile.required)
-    expect(errors.videoFile).toBeUndefined()
+    expect(errors.videoUrl).toBeUndefined()
   })
 
-  it('accepts an empty or http(s) video link only', () => {
+  it('accepts an empty or YouTube video link only', () => {
     expect(lessonErrors({ videoUrl: '  ' }).videoUrl).toBeUndefined()
-    expect(lessonErrors({ videoUrl: ' https://youtu.be/abc ' }).videoUrl).toBeUndefined()
-    expect(lessonErrors({ videoUrl: 'HTTP://example.com/v' }).videoUrl).toBeUndefined()
-    for (const videoUrl of ['youtu.be/abc', 'ftp://x/v.mp4', 'https://x.com/a b']) {
+    expect(lessonErrors({ videoUrl: ' https://youtu.be/dQw4w9WgXcQ ' }).videoUrl).toBeUndefined()
+    expect(
+      lessonErrors({ videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=30' }).videoUrl,
+    ).toBeUndefined()
+    for (const videoUrl of [
+      'youtu.be/dQw4w9WgXcQ',
+      'https://youtu.be/abc',
+      'https://drive.google.com/file/d/xyz/view',
+      'https://x.com/a b',
+    ]) {
       expect(lessonErrors({ videoUrl }).videoUrl).toBe(LESSON_FIELD_MESSAGES.videoUrl.invalid)
     }
     expect(lessonErrors({ videoUrl: `https://x.com/${'a'.repeat(2048)}` }).videoUrl).toBe(
@@ -97,7 +121,6 @@ describe('lessonSchema', () => {
     const result = lessonUpdateSchema.safeParse({
       ...VALID_LESSON,
       documentFile: undefined,
-      videoFile: undefined,
     })
     expect(result.success).toBe(true)
   })
@@ -106,21 +129,14 @@ describe('lessonSchema', () => {
     expect(lessonErrors({ documentFile: fileOf('setup.exe') }).documentFile).toBe(
       LESSON_FIELD_MESSAGES.documentFile.type,
     )
-    expect(lessonErrors({ videoFile: fileOf('bai-1.pdf') }).videoFile).toBe(
-      LESSON_FIELD_MESSAGES.videoFile.type,
-    )
-    expect(lessonErrors({ videoFile: fileOf('CLIP.MOV') }).videoFile).toBeUndefined()
+    expect(lessonErrors({ documentFile: fileOf('BAI-1.DOCX') }).documentFile).toBeUndefined()
   })
 
-  it('limits the document to 50 MB and the video to 500 MB', () => {
+  it('limits the document to 50 MB', () => {
     const MB = 1024 * 1024
     expect(lessonErrors({ documentFile: fileOf('a.pdf', 50 * MB) }).documentFile).toBeUndefined()
     expect(lessonErrors({ documentFile: fileOf('a.pdf', 50 * MB + 1) }).documentFile).toBe(
       LESSON_FIELD_MESSAGES.documentFile.tooLarge,
     )
-    expect(lessonErrors({ videoFile: fileOf('a.mp4', 500 * MB + 1) }).videoFile).toBe(
-      LESSON_FIELD_MESSAGES.videoFile.tooLarge,
-    )
-    expect(LESSON_FIELD_MESSAGES.videoFile.tooLarge).toBe('Video tối đa 500 MB')
   })
 })

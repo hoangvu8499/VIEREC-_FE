@@ -7,6 +7,7 @@ import { ENROLLMENT_STATUS_LABELS } from '@/constants/course'
 import { coursePath } from '@/constants/routes'
 import type { Course } from '@/types/course'
 import { cn } from '@/utils/cn'
+import { formatVnd } from '@/utils/format-currency'
 
 import styles from './course-card.module.css'
 
@@ -18,7 +19,7 @@ interface CourseCardProps {
   action?: ReactNode
 }
 
-/** Thẻ khoá học cho trang người dùng: ảnh bìa theo lĩnh vực, mô tả ngắn, giảng viên, số bài. */
+/** Thẻ khoá học cho trang người dùng: ảnh bìa theo lĩnh vực, mô tả ngắn, giảng viên, số bài, học phí. */
 export function CourseCard({ course, headingLevel: Heading = 'h3', action }: CourseCardProps) {
   const { icon: Icon, tone, label } = courseVisual(course.name)
   const enrollment = course.myEnrollmentStatus
@@ -60,9 +61,15 @@ export function CourseCard({ course, headingLevel: Heading = 'h3', action }: Cou
             {course.lessonCount > 0 ? `${course.lessonCount} bài học` : 'Đang cập nhật bài học'}
           </li>
         </ul>
-        <span className={styles.more} aria-hidden>
-          Tìm hiểu khoá học <ArrowRight size={16} />
-        </span>
+        <div className={styles.footer}>
+          <p className={styles.price}>
+            <span className="sr-only">Học phí: </span>
+            {formatVnd(course.price)}
+          </p>
+          <span className={styles.more} aria-hidden>
+            Tìm hiểu <ArrowRight size={16} />
+          </span>
+        </div>
         {action}
       </div>
     </article>

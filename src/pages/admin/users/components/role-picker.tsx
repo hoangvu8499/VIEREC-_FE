@@ -53,35 +53,38 @@ export function RolePicker({
       )}
       {roles.data && (
         <div className={cn(styles.roleList, layout === 'stack' && styles.roleStack)}>
-          {sortRoles(roles.data).map((role, index) => {
-            const locked = role.code === ROLES.SUPER_ADMIN && !canGrantSuperAdmin
-            const checked = value.includes(role.code)
-            const label = ROLE_LABELS[role.code as RoleCode] ?? role.name
-            return (
-              <CheckboxField
-                key={role.code}
-                ref={index === 0 ? ref : undefined}
-                label={label}
-                hint={
-                  locked
-                    ? 'Chỉ Quản trị cấp cao mới cấp hoặc gỡ được vai trò này.'
-                    : role.description === label
-                      ? undefined
-                      : role.description
-                }
-                fieldClassName={styles.roleOption}
-                checked={checked}
-                disabled={disabled || locked}
-                onChange={(event) =>
-                  onChange(
-                    event.target.checked
-                      ? [...value, role.code]
-                      : value.filter((code) => code !== role.code),
-                  )
-                }
-              />
-            )
-          })}
+          {sortRoles(roles.data)
+            // BUSINESS cấp ở trang Doanh nghiệp (phải gắn với một doanh nghiệp); chỉ hiện để gỡ.
+            .filter((role) => role.code !== ROLES.BUSINESS || value.includes(role.code))
+            .map((role, index) => {
+              const locked = role.code === ROLES.SUPER_ADMIN && !canGrantSuperAdmin
+              const checked = value.includes(role.code)
+              const label = ROLE_LABELS[role.code as RoleCode] ?? role.name
+              return (
+                <CheckboxField
+                  key={role.code}
+                  ref={index === 0 ? ref : undefined}
+                  label={label}
+                  hint={
+                    locked
+                      ? 'Chỉ Quản trị cấp cao mới cấp hoặc gỡ được vai trò này.'
+                      : role.description === label
+                        ? undefined
+                        : role.description
+                  }
+                  fieldClassName={styles.roleOption}
+                  checked={checked}
+                  disabled={disabled || locked}
+                  onChange={(event) =>
+                    onChange(
+                      event.target.checked
+                        ? [...value, role.code]
+                        : value.filter((code) => code !== role.code),
+                    )
+                  }
+                />
+              )
+            })}
         </div>
       )}
       {error && (

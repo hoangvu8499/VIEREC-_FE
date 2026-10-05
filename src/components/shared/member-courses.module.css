@@ -1,0 +1,132 @@
+.list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.status {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-muted);
+}
+
+.PENDING {
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-white));
+  color: var(--color-accent-dark);
+}
+
+.ENROLLED {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.COMPLETED {
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary-dark);
+}
+
+.muted {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.muted strong {
+  color: var(--color-text);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  color: var(--color-primary);
+}
+
+.rowBody {
+  min-width: 0;
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.bar {
+  position: relative;
+  margin: 6px 0;
+}
+
+.meter {
+  display: block;
+  width: 100%;
+  height: 8px;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  appearance: none;
+}
+
+.meter::-webkit-progress-bar {
+  background: var(--color-border);
+}
+
+.meter::-webkit-progress-value {
+  background: var(--color-secondary);
+}
+
+.meter::-moz-progress-bar {
+  background: var(--color-secondary);
+}
+
+/* Vạch mốc đủ điều kiện thi. */
+.bar i {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: var(--color-accent-dark);
+}
+
+.verdict {
+  font-weight: 700;
+}
+
+.pass {
+  color: var(--color-secondary-dark);
+}
+
+.fail {
+  color: var(--color-danger-dark);
+}

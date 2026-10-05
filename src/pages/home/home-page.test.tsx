@@ -2,7 +2,7 @@ import { screen, within } from '@testing-library/react'
 
 import { ROUTES } from '@/constants/routes'
 import HomePage from '@/pages/home/home-page'
-import { CATEGORIES, NEWS, PARTNERS } from '@/pages/home/home-data'
+import { CATEGORIES, NEWS, PARTNERS, SERVICES } from '@/pages/home/home-data'
 import { courseService } from '@/services/course-service'
 import { COURSE_FIXTURE, coursePage } from '@/test/fixtures'
 import { renderRoutes } from '@/test/render-routes'
@@ -27,13 +27,13 @@ describe('HomePage', () => {
 
   afterEach(() => vi.restoreAllMocks())
 
-  it('shows the 6 newest published courses with a link to all', async () => {
+  it('shows the 3 newest published courses with a link to all', async () => {
     renderHome()
 
     const section = await screen.findByRole('region', {
       name: 'Bắt đầu hành trình an toàn của bạn',
     })
-    expect(await within(section).findAllByRole('article')).toHaveLength(6)
+    expect(await within(section).findAllByRole('article')).toHaveLength(3)
     expect(courseService.list).toHaveBeenCalledWith({
       page: 0,
       keyword: undefined,
@@ -84,6 +84,15 @@ describe('HomePage', () => {
     const section = screen.getByRole('region', { name: 'Tin tức & Sự kiện' })
     expect(within(section).getAllByRole('heading', { level: 3 })).toHaveLength(NEWS.length)
     expect(within(section).getByText('20/09/2026')).toBeInTheDocument()
+  })
+
+  it('renders the services, the emergency report first', () => {
+    renderHome()
+
+    const section = screen.getByRole('region', { name: 'VIEREC đồng hành cùng bạn' })
+    const links = within(section).getAllByRole('link')
+    expect(links).toHaveLength(SERVICES.length)
+    expect(links[0]).toHaveAttribute('href', ROUTES.EMERGENCY_REPORT)
   })
 
   it('renders partners', () => {

@@ -58,7 +58,6 @@ describe('LessonEditPage', () => {
         instructions: LESSON_FIXTURE.instructions,
         sortOrder: 1,
         documentFile: undefined,
-        videoFile: undefined,
         videoUrl: '',
         removeVideo: false,
       },
@@ -67,19 +66,17 @@ describe('LessonEditPage', () => {
     expect(await screen.findByText('Chi tiết: Đã lưu bài học “Bài mới”.')).toBeInTheDocument()
   })
 
-  it('sends only the replaced file', async () => {
+  it('sends the replaced document', async () => {
     const user = userEvent.setup()
     const updateLesson = vi.spyOn(courseService, 'updateLesson').mockResolvedValue(LESSON_FIXTURE)
-    const video = new File(['v'], 'moi.webm', { type: 'video/webm' })
+    const document = new File(['d'], 'moi.pdf', { type: 'application/pdf' })
     renderPage()
 
-    await user.upload(await screen.findByLabelText('Thay file video'), video)
+    await user.upload(await screen.findByLabelText('Thay tài liệu'), document)
     await user.click(screen.getByRole('button', { name: 'Lưu thay đổi' }))
 
-    expect(updateLesson.mock.calls[0]?.[2]).toMatchObject({
-      documentFile: undefined,
-      videoFile: video,
-    })
+    expect(updateLesson.mock.calls[0]?.[2]).toMatchObject({ documentFile: document })
+    expect(screen.queryByLabelText(/File video/)).not.toBeInTheDocument()
   })
 
   it('removes the uploaded video when asked', async () => {
@@ -87,7 +84,7 @@ describe('LessonEditPage', () => {
     const updateLesson = vi.spyOn(courseService, 'updateLesson').mockResolvedValue(LESSON_FIXTURE)
     renderPage()
 
-    await user.click(await screen.findByLabelText('Gỡ file video hiện tại (bai-1.mp4)'))
+    await user.click(await screen.findByLabelText('Gỡ file video tải lên trước đây (bai-1.mp4)'))
     await user.click(screen.getByRole('button', { name: 'Lưu thay đổi' }))
     expect(updateLesson.mock.calls[0]?.[2]).toMatchObject({ removeVideo: true })
   })
@@ -98,13 +95,20 @@ describe('LessonEditPage', () => {
     // Bài 12 chỉ có link video, không có file video → không có ô "gỡ video".
     renderPage(12)
 
-    const link = await screen.findByLabelText('Link video')
+    const link = await screen.findByLabelText('Link YouTube')
     expect(link).toHaveValue('https://www.youtube.com/watch?v=abc123')
     expect(screen.queryByLabelText(/^Gỡ file video/)).not.toBeInTheDocument()
 
+    // Link cũ không phải video YouTube hợp lệ → phải thay trước khi lưu.
+    await user.click(screen.getByRole('button', { name: 'Lưu thay đổi' }))
+    expect(await screen.findByText(LESSON_FIELD_MESSAGES.videoUrl.invalid)).toBeInTheDocument()
+    expect(updateLesson).not.toHaveBeenCalled()
+
+    await user.clear(link)
+    await user.type(link, 'https://youtu.be/dQw4w9WgXcQ')
     await user.click(screen.getByRole('button', { name: 'Lưu thay đổi' }))
     expect(updateLesson.mock.calls[0]?.[2]).toMatchObject({
-      videoUrl: 'https://www.youtube.com/watch?v=abc123',
+      videoUrl: 'https://youtu.be/dQw4w9WgXcQ',
     })
   })
 
@@ -113,7 +117,7 @@ describe('LessonEditPage', () => {
     const updateLesson = vi.spyOn(courseService, 'updateLesson').mockResolvedValue(LESSON_FIXTURE)
     renderPage(12)
 
-    await user.clear(await screen.findByLabelText('Link video'))
+    await user.clear(await screen.findByLabelText('Link YouTube'))
     await user.click(screen.getByRole('button', { name: 'Lưu thay đổi' }))
     expect(updateLesson.mock.calls[0]?.[2]).toMatchObject({ videoUrl: '' })
   })

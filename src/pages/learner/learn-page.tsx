@@ -1,7 +1,6 @@
 import {
   ArrowLeft,
   ArrowRight,
-  Award,
   CircleAlert,
   CircleCheck,
   Download,
@@ -11,20 +10,18 @@ import {
   Hourglass,
   Lock,
 } from 'lucide-react'
-import { useState } from 'react'
 import { useSearchParams } from 'react-router'
 
-import { Alert } from '@/components/common/alert'
 import { Button } from '@/components/common/button'
 import { ButtonLink } from '@/components/common/button-link'
 import { EmptyState } from '@/components/common/empty-state'
 import { API_ERROR_CODES } from '@/constants/api-error-codes'
-import { CONTACT } from '@/constants/contact'
 import { EXAM_WATCH_RATIO } from '@/constants/course'
 import { coursePath, LEARNER_ROUTES } from '@/constants/routes'
 import { useCourseDetail, usePositiveIdParam } from '@/hooks/use-course-detail'
 import { useDocumentTitle } from '@/hooks/use-document-title'
-import { LearnerPageHeader } from '@/pages/learner/components/learner-page-header'
+import { AccountPageHeader } from '@/layouts/user/account-page-header'
+import { ExamAction } from '@/pages/learner/components/exam-action'
 import { LessonVideo } from '@/pages/learner/components/lesson-video'
 import {
   lessonVideos,
@@ -45,8 +42,6 @@ import styles from './learn-page.module.css'
 
 /** Bài đang xem trên URL: `?bai=<lessonId>`. */
 const LESSON_PARAM = 'bai'
-
-const percentFormatter = new Intl.NumberFormat('vi-VN', { style: 'percent' })
 
 function formatMinutes(seconds: number): string {
   return `${Math.round(seconds / 60)} phút`
@@ -156,7 +151,7 @@ function Classroom({ course }: { course: CourseDetail }) {
 
   return (
     <>
-      <LearnerPageHeader
+      <AccountPageHeader
         title={course.name}
         description={`Giảng viên ${course.instructorName} · ${lessons.length} bài học`}
         action={
@@ -167,6 +162,7 @@ function Classroom({ course }: { course: CourseDetail }) {
       />
 
       <ProgressPanel
+        courseId={course.id}
         summary={summary}
         videoCount={videos.length}
         completed={course.myEnrollmentStatus === 'COMPLETED'}
@@ -247,17 +243,17 @@ function Classroom({ course }: { course: CourseDetail }) {
 }
 
 function ProgressPanel({
+  courseId,
   summary,
   videoCount,
   completed,
 }: {
+  courseId: number
   summary: ProgressSummary
   videoCount: number
   completed: boolean
 }) {
-  const [examNotice, setExamNotice] = useState(false)
   const percent = Math.min(100, Math.floor(summary.ratio * 100))
-  const required = percentFormatter.format(EXAM_WATCH_RATIO)
 
   return (
     <section className={styles.progress} aria-labelledby="progress-title">
@@ -291,34 +287,7 @@ function ProgressPanel({
         )}
       </div>
 
-      {completed ? (
-        <ButtonLink to={LEARNER_ROUTES.CERTIFICATES} variant="outline">
-          <Award size={18} aria-hidden /> Xem chứng chỉ
-        </ButtonLink>
-      ) : (
-        <div className={styles.exam}>
-          <Button
-            variant="accent"
-            disabled={!summary.examReady}
-            aria-describedby="exam-hint"
-            onClick={() => setExamNotice(true)}
-          >
-            <GraduationCap size={18} aria-hidden /> Thi chứng chỉ
-          </Button>
-          <p id="exam-hint" className={styles.examHint}>
-            {summary.examReady
-              ? 'Bạn đã đủ điều kiện thi chứng chỉ.'
-              : `Xem tối thiểu ${required} tổng thời lượng video để mở bài thi.`}
-          </p>
-        </div>
-      )}
-
-      {examNotice && (
-        <Alert variant="info" className={styles.examNotice}>
-          Bài thi chứng chỉ trực tuyến chưa có trên hệ thống. Vui lòng gọi {CONTACT.HOTLINE} để đăng
-          ký thi.
-        </Alert>
-      )}
+      <ExamAction courseId={courseId} watchedEnough={summary.examReady} completed={completed} />
     </section>
   )
 }

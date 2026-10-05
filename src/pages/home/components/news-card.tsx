@@ -13,7 +13,7 @@ export function NewsCard({ news }: { news: NewsItem }) {
         {news.image ? (
           <img src={news.image} alt="" loading="lazy" />
         ) : (
-          <Newspaper size={28} aria-hidden />
+          <Newspaper size={26} aria-hidden />
         )}
       </div>
       <div className={styles.meta}>

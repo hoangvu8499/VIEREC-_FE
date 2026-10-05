@@ -8,7 +8,7 @@ import { USER_STATUS_LABELS } from '@/constants/user'
 import { useDocumentTitle } from '@/hooks/use-document-title'
 import { useMyCertificates } from '@/hooks/use-enrollments'
 import { ChangePasswordForm } from '@/pages/learner/components/change-password-form'
-import { LearnerPageHeader } from '@/pages/learner/components/learner-page-header'
+import { AccountPageHeader } from '@/layouts/user/account-page-header'
 import { ProfileForm } from '@/pages/learner/components/profile-form'
 import { useAuthStore } from '@/stores/auth-store'
 import type { User } from '@/types/user'
@@ -92,7 +92,7 @@ export default function ProfilePage() {
 
   return (
     <>
-      <LearnerPageHeader
+      <AccountPageHeader
         title="Hồ sơ cá nhân"
         description="Thông tin bạn đã đăng ký với VIEREC Academy."
         action={

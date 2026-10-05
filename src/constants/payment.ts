@@ -1,19 +1,25 @@
 import type { PaymentMethod, PaymentSearchParams, PaymentStatus } from '@/types/payment'
 
-/** Tài khoản nhận học phí, khớp ảnh QR `assets/images/payment-qr.jpg`. Đổi tài khoản thì đổi cả ảnh. */
+/** Tài khoản nhận học phí; mã QR VietQR sinh từ đây (`vietQrPayload`). */
 export const BANK_ACCOUNT = {
   bankName: 'TPBank',
+  /** Mã ngân hàng NAPAS của TPBank. */
+  bankBin: '970423',
   accountName: 'TON THAT HOANG VU',
   accountNumber: '08343144141',
 } as const
 
 /**
- * Nội dung chuyển khoản để admin đối chiếu sao kê với lượt đăng ký. Chỉ chữ, số và dấu cách: nhiều ngân hàng
- * bỏ dấu tiếng Việt và ký tự đặc biệt.
+ * Nội dung chuyển khoản để admin đối chiếu sao kê: mã khoá học (`KH` + id) và mã học viên (`HV` + id user).
+ * Chỉ chữ, số và dấu cách: nhiều ngân hàng bỏ dấu tiếng Việt và ký tự đặc biệt.
  */
-export function transferContent(username: string, courseId: number): string {
-  const account = username.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()
-  return `VIEREC ${account} KH${courseId}`
+export function transferContent(courseId: number, userId: number): string {
+  return `VIEREC KH${courseId} HV${userId}`
+}
+
+/** Nội dung chuyển khoản khi doanh nghiệp ghi danh hộ: mã khoá học và mã doanh nghiệp (`DN` + id). */
+export function businessTransferContent(courseId: number, businessId: number): string {
+  return `VIEREC KH${courseId} DN${businessId}`
 }
 
 export const PAYMENT_QUERY_KEYS = {

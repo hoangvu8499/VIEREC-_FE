@@ -1,5 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
-import { Crown, GraduationCap, RotateCw, ShieldCheck, Users, type LucideIcon } from 'lucide-react'
+import {
+  Building2,
+  Crown,
+  GraduationCap,
+  RotateCw,
+  ShieldCheck,
+  Users,
+  type LucideIcon,
+} from 'lucide-react'
 
 import { Button } from '@/components/common/button'
 import { ButtonLink } from '@/components/common/button-link'
@@ -33,6 +41,15 @@ const ROLE_DETAILS: Record<RoleCode, { icon: LucideIcon; abilities: string[] }> 
       'Vào trang quản trị',
       'Quản lý khoá học và bài học',
       'Tạo, sửa, khoá, xoá tài khoản; gán vai trò Quản trị viên / Học viên',
+    ],
+  },
+  BUSINESS: {
+    icon: Building2,
+    abilities: [
+      'Tạo tài khoản học viên cho nhân viên doanh nghiệp mình',
+      'Ghi danh nhân viên vào khoá học (admin duyệt sau khi nhận chuyển khoản)',
+      'Theo dõi tiến độ, điểm thi, chứng chỉ của từng nhân viên',
+      'Chỉ cấp qua trang Doanh nghiệp (tài khoản phải gắn với một doanh nghiệp)',
     ],
   },
   TRAINEE: {

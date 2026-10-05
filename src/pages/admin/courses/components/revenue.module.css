@@ -1,0 +1,120 @@
+/* ---------- Tổng tháng ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.monthPicker {
+  min-width: 200px;
+}
+
+.panelTitle {
+  padding: 16px 16px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.panelNote {
+  padding: 4px 16px 0;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.breakdown {
+  margin-bottom: 24px;
+}
+
+/* ---------- Theo khoá học ---------- */
+.courses {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  list-style: none;
+}
+
+.course {
+  display: grid;
+  gap: 6px;
+}
+
+.courseHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.courseName {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.courseName:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.courseAmount {
+  color: var(--color-accent-dark);
+  white-space: nowrap;
+}
+
+.bar {
+  overflow: hidden;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary);
+}
+
+.courseMeta {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+/* ---------- Bảng chi tiết ---------- */
+.amountCell {
+  font-weight: 700;
+  color: var(--color-accent-dark);
+  white-space: nowrap;
+}
+
+.matched {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+@media (min-width: 768px) {
+  .panelTitle {
+    padding: 20px 20px 0;
+  }
+
+  .panelNote {
+    padding: 4px 20px 0;
+  }
+
+  .courses {
+    padding: 20px;
+  }
+}
+
+@media (min-width: 1280px) {
+  /* Thắng `.table tbody td { text-align: left }` của course-list.module.css. */
+  table thead th.amountHead,
+  table tbody td.amountCell {
+    text-align: right;
+  }
+}

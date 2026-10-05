@@ -1,4 +1,3 @@
-import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router'
 
 import type { Category } from '@/types/content'
@@ -10,9 +9,10 @@ export function CategoryCard({ category }: { category: Category }) {
 
   return (
     <Link to={path} className={styles.card}>
-      <Icon size={44} strokeWidth={1.75} color={color} aria-hidden />
+      <span className={styles.icon} style={{ color }}>
+        <Icon size={24} strokeWidth={1.9} aria-hidden />
+      </span>
       <span className={styles.name}>{name}</span>
-      <ArrowRight className={styles.arrow} size={16} aria-hidden />
     </Link>
   )
 }

@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FileText, Film } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
-import { Controller, useForm, useWatch } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 import { Alert } from '@/components/common/alert'
 import { Button } from '@/components/common/button'
@@ -37,7 +37,6 @@ const FIELD_ORDER: LessonField[] = [
   'sortOrder',
   'instructions',
   'documentFile',
-  'videoFile',
   'videoUrl',
 ]
 
@@ -101,7 +100,6 @@ export function LessonForm({
 
   const isSubmitting = saveLesson.isPending
   const currentVideo = lesson?.files.find((file) => file.fileType === 'VIDEO')
-  const newVideo = useWatch({ control, name: 'videoFile' })
   const submitLabel = isEdit
     ? { idle: 'Lưu thay đổi', busy: 'Đang lưu...' }
     : { idle: 'Tạo bài học', busy: 'Đang tạo...' }
@@ -178,53 +176,26 @@ export function LessonForm({
 
       <fieldset className={styles.fieldset} disabled={isSubmitting}>
         <legend className={styles.legend}>
-          Video bài giảng <span className={styles.optional}>(không bắt buộc)</span>
+          Video bài giảng (YouTube) <span className={styles.optional}>(không bắt buộc)</span>
         </legend>
         <p className={styles.sectionNote}>
-          Tải file video lên, dán link video ở hệ thống khác (YouTube, Google Drive…), hoặc cả hai.
+          Đăng video lên YouTube (có thể để chế độ “Không công khai”) rồi dán link vào đây. Học viên
+          xem ngay trên trang học, hệ thống tính tiến độ xem để mở bài thi.
         </p>
-        <div className={styles.files}>
-          <Controller
-            control={control}
-            name="videoFile"
-            render={({ field, fieldState }) => (
-              <FileField
-                ref={field.ref}
-                name={field.name}
-                label={isEdit && currentVideo ? 'Thay file video' : 'File video'}
-                icon={Film}
-                accept={LESSON_FILE_ACCEPT.video}
-                hint={keepFileHint(lesson, 'VIDEO', LESSON_FILE_HINTS.video)}
-                value={field.value as File | undefined}
-                disabled={isSubmitting}
-                error={fieldState.error?.message}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
-            )}
-          />
-          <TextField
-            label="Link video"
-            type="url"
-            inputMode="url"
-            maxLength={VIDEO_URL_MAX}
-            placeholder="https://www.youtube.com/watch?v=…"
-            hint={
-              lesson?.videoUrl ? 'Xoá trống ô này để bỏ link hiện tại' : 'Để trống nếu không có'
-            }
-            error={errors.videoUrl?.message}
-            {...register('videoUrl')}
-          />
-        </div>
+        <TextField
+          label="Link YouTube"
+          type="url"
+          inputMode="url"
+          maxLength={VIDEO_URL_MAX}
+          placeholder="https://www.youtube.com/watch?v=…"
+          hint={lesson?.videoUrl ? 'Xoá trống ô này để bỏ link hiện tại' : 'Để trống nếu không có'}
+          error={errors.videoUrl?.message}
+          {...register('videoUrl')}
+        />
         {currentVideo && (
           <CheckboxField
-            label={`Gỡ file video hiện tại (${currentVideo.originalName})`}
-            hint={
-              newVideo
-                ? 'Không cần: file video mới sẽ thay file hiện tại.'
-                : 'Bài học sẽ không còn file video tải lên (link video, nếu có, vẫn giữ).'
-            }
-            disabled={Boolean(newVideo)}
+            label={`Gỡ file video tải lên trước đây (${currentVideo.originalName})`}
+            hint="Bài học chỉ còn dùng link YouTube. File cũ vẫn được lưu trên máy chủ."
             {...register('removeVideo')}
           />
         )}
@@ -242,7 +213,9 @@ export function LessonForm({
             value={progress}
             aria-label="Tiến độ tải lên"
           />
-          <p className={styles.progressNote}>Video lớn có thể mất vài phút. Đừng đóng trang này.</p>
+          <p className={styles.progressNote}>
+            Tài liệu lớn có thể mất một lúc. Đừng đóng trang này.
+          </p>
         </div>
       )}
 

@@ -1,4 +1,4 @@
-import { CircleUserRound, GraduationCap, LayoutDashboard, PhoneCall } from 'lucide-react'
+import { Building2, CircleUserRound, GraduationCap, LayoutDashboard, PhoneCall } from 'lucide-react'
 import { useNavigate } from 'react-router'
 
 import { Logo } from '@/components/brand/logo'
@@ -7,11 +7,11 @@ import { ButtonLink } from '@/components/common/button-link'
 import { Container } from '@/components/common/container'
 import { LanguageSwitcher } from '@/components/shared/language-switcher'
 import { CONTACT } from '@/constants/contact'
-import { ADMIN_ROUTES, LEARNER_ROUTES, ROUTES } from '@/constants/routes'
+import { ADMIN_ROUTES, BUSINESS_ROUTES, LEARNER_ROUTES, ROUTES } from '@/constants/routes'
 import { useLogout } from '@/hooks/use-logout'
 import { useAuthStore } from '@/stores/auth-store'
 import { userFullName } from '@/utils/user-full-name'
-import { isAdmin } from '@/utils/user-roles'
+import { isAdmin, isBusinessManager } from '@/utils/user-roles'
 
 import styles from './site-header.module.css'
 
@@ -40,10 +40,25 @@ export function SiteHeader() {
                 <CircleUserRound size={20} aria-hidden />
                 {userFullName(user) || user.username}
               </span>
-              <ButtonLink to={LEARNER_ROUTES.OVERVIEW} variant="outline" aria-label="Góc học viên">
-                <GraduationCap size={18} aria-hidden />
-                <span className={styles.buttonLabel}>Góc học viên</span>
-              </ButtonLink>
+              {isBusinessManager(user) ? (
+                <ButtonLink
+                  to={BUSINESS_ROUTES.OVERVIEW}
+                  variant="outline"
+                  aria-label="Góc doanh nghiệp"
+                >
+                  <Building2 size={18} aria-hidden />
+                  <span className={styles.buttonLabel}>Góc doanh nghiệp</span>
+                </ButtonLink>
+              ) : (
+                <ButtonLink
+                  to={LEARNER_ROUTES.OVERVIEW}
+                  variant="outline"
+                  aria-label="Góc học viên"
+                >
+                  <GraduationCap size={18} aria-hidden />
+                  <span className={styles.buttonLabel}>Góc học viên</span>
+                </ButtonLink>
+              )}
               {isAdmin(user) && (
                 <ButtonLink to={ADMIN_ROUTES.DASHBOARD} variant="outline" aria-label="Quản trị">
                   <LayoutDashboard size={18} aria-hidden />

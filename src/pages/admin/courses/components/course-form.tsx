@@ -18,6 +18,7 @@ import { courseErrorMessage, useSaveCourse } from '@/pages/admin/courses/use-cou
 import { courseApiFieldErrors } from '@/schemas/course-api-errors'
 import {
   COURSE_NAME_MAX,
+  COURSE_PRICE_MIN,
   courseFormValues,
   courseSchema,
   toCoursePayload,
@@ -26,11 +27,12 @@ import {
   type CourseFormValues,
 } from '@/schemas/course-schema'
 import type { Course, CourseDetail } from '@/types/course'
+import { formatVnd } from '@/utils/format-currency'
 
 import styles from './course-form.module.css'
 
 /** Thứ tự ô trên form — lỗi server đầu tiên theo thứ tự này được focus. */
-const FIELD_ORDER: CourseField[] = ['name', 'description', 'instructorId', 'status']
+const FIELD_ORDER: CourseField[] = ['name', 'description', 'instructorId', 'price', 'status']
 
 const STATUS_OPTIONS = COURSE_STATUSES.map((status) => ({
   value: status,
@@ -90,6 +92,7 @@ export function CourseForm({ course, cancelTo, onSuccess }: CourseFormProps) {
 
   const isSubmitting = saveCourse.isPending
   const status = useWatch({ control, name: 'status' })
+  const price = Number(useWatch({ control, name: 'price' })?.replace(/[.\s]/g, ''))
   const isEdit = Boolean(course)
   const submitLabel = isEdit
     ? { idle: 'Lưu thay đổi', busy: 'Đang lưu...' }
@@ -144,6 +147,21 @@ export function CourseForm({ course, cancelTo, onSuccess }: CourseFormProps) {
               }}
             />
           )}
+        />
+        <TextField
+          label="Học phí (VND)"
+          required
+          inputMode="numeric"
+          autoComplete="off"
+          placeholder="Vd. 100.000"
+          hint={
+            price >= COURSE_PRICE_MIN
+              ? `${formatVnd(price)} — số tiền học viên chuyển khoản khi đăng ký`
+              : 'Số tiền học viên chuyển khoản khi đăng ký'
+          }
+          error={errors.price?.message}
+          fieldClassName={styles.statusField}
+          {...register('price')}
         />
         <SelectField
           label="Trạng thái"

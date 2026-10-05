@@ -1,14 +1,15 @@
 import type { ReactNode } from 'react'
 
-import styles from './learner-ui.module.css'
+import styles from './account-page-header.module.css'
 
-interface LearnerPageHeaderProps {
+interface AccountPageHeaderProps {
   title: string
   description: string
   action?: ReactNode
 }
 
-export function LearnerPageHeader({ title, description, action }: LearnerPageHeaderProps) {
+/** Đầu trang trong Góc học viên / Góc doanh nghiệp. */
+export function AccountPageHeader({ title, description, action }: AccountPageHeaderProps) {
   return (
     <header className={styles.pageHeader}>
       <div>

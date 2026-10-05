@@ -1,4 +1,13 @@
-import { BadgeCheck, BookOpen, LayoutDashboard, MapPinned, ShieldCheck, Users } from 'lucide-react'
+import {
+  BadgeCheck,
+  BookOpen,
+  Building2,
+  LayoutDashboard,
+  MapPinned,
+  ShieldCheck,
+  Users,
+  Wallet,
+} from 'lucide-react'
 
 import { ADMIN_ROUTES } from '@/constants/routes'
 import type { NavItem } from '@/types/navigation'
@@ -17,6 +26,19 @@ export const ADMIN_NAV: NavItem[] = [
     path: ADMIN_ROUTES.ENROLLMENT_REQUESTS,
     icon: BadgeCheck,
     description: 'Đối chiếu chuyển khoản và mở khoá học cho học viên đã thanh toán.',
+  },
+  {
+    label: 'Doanh thu',
+    path: ADMIN_ROUTES.REVENUE,
+    icon: Wallet,
+    description:
+      'Tổng thu theo tháng từ các lượt đăng ký đã duyệt: thu theo khoá, từng học viên đã trả.',
+  },
+  {
+    label: 'Doanh nghiệp',
+    path: ADMIN_ROUTES.BUSINESSES,
+    icon: Building2,
+    description: 'Khách hàng doanh nghiệp: tài khoản quản lý, học viên và kết quả học tập của họ.',
   },
   {
     label: 'Điểm hỗ trợ sự cố',

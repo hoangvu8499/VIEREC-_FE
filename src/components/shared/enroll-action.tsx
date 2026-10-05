@@ -15,7 +15,7 @@ import { cn } from '@/utils/cn'
 import styles from './enroll-action.module.css'
 
 interface EnrollActionProps {
-  course: Pick<Course, 'id' | 'name' | 'myEnrollmentStatus'>
+  course: Pick<Course, 'id' | 'name' | 'price' | 'myEnrollmentStatus'>
   /** `detail`: trang chi tiết khoá (nút to, có giải thích). `card`: thẻ khoá học (gọn). */
   variant?: 'detail' | 'card'
 }

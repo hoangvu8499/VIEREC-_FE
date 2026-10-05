@@ -1,6 +1,6 @@
 import { GraduationCap, ShieldCheck } from 'lucide-react'
 
-import bannerImage from '@/assets/images/banner.jpg'
+import bannerImage from '@/assets/images/banner.webp'
 import { ButtonLink } from '@/components/common/button-link'
 import { Container } from '@/components/common/container'
 import { ROUTES } from '@/constants/routes'
@@ -13,20 +13,24 @@ export function HeroSection() {
   return (
     <>
       <div className={styles.banner}>
-        <img src={bannerImage} alt="VIEREC Academy – An toàn là bước đầu để phát triển" />
+        <img
+          src={bannerImage}
+          alt="VIEREC Academy – An toàn là bước đầu để phát triển"
+          width={1920}
+          height={231}
+        />
       </div>
 
       <section className={styles.hero} aria-labelledby="hero-title">
         <Container className={styles.inner}>
           <div className={styles.content}>
-            <p className={styles.tagline}>ĐÀO TẠO – ỨNG PHÓ – KIẾN TẠO</p>
+            <p className={styles.tagline}>Đào tạo – Ứng phó – Kiến tạo</p>
             <h1 id="hero-title" className={styles.title}>
               Vì một Việt Nam an toàn và phát triển bền vững
             </h1>
             <p className={styles.description}>
-              VIEREC là nền tảng đào tạo và hỗ trợ ứng phó sự cố toàn diện, đồng hành cùng cá nhân,
-              doanh nghiệp và cộng đồng trong xây dựng môi trường làm việc an toàn, xanh và bền
-              vững.
+              Nền tảng đào tạo và hỗ trợ ứng phó sự cố, đồng hành cùng cá nhân, doanh nghiệp và cộng
+              đồng xây dựng môi trường làm việc an toàn, xanh và bền vững.
             </p>
             <div className={styles.actions}>
               <ButtonLink to={ROUTES.COURSES} variant="accent" size="lg">
@@ -38,16 +42,8 @@ export function HeroSection() {
                 Tìm hiểu dịch vụ
               </ButtonLink>
             </div>
-            <HeroStats stats={HERO_STATS} />
           </div>
-
-          <div className={styles.visual}>
-            <p className={styles.slogan}>
-              Chủ động hôm nay
-              <br />
-              An toàn ngày mai
-            </p>
-          </div>
+          <HeroStats stats={HERO_STATS} />
         </Container>
       </section>
     </>

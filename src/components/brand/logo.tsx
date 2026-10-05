@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 
-import logoImage from '@/assets/images/logo.jpg'
+import logoImage from '@/assets/images/logo-mark.webp'
 import { ROUTES } from '@/constants/routes'
 import { cn } from '@/utils/cn'
 
@@ -31,7 +31,7 @@ export function Logo({
       aria-label={isCompact ? title : undefined}
     >
       <span className={styles.mark}>
-        <img src={logoImage} alt="" />
+        <img src={logoImage} alt="" width={204} height={204} />
       </span>
       {!isCompact && (
         <span className={styles.text}>

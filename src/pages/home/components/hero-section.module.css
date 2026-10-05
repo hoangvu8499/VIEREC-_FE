@@ -5,30 +5,33 @@
 }
 
 .banner img {
+  display: block;
   width: 100%;
   height: auto;
 }
 
 .hero {
-  background: linear-gradient(180deg, var(--color-white) 0%, var(--color-surface) 100%);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-white);
 }
 
 .inner {
   display: grid;
-  gap: 32px;
+  gap: 28px;
   padding-block: 32px;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .tagline {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--color-secondary);
 }
 
@@ -36,13 +39,12 @@
   font-size: 30px;
   font-weight: 800;
   line-height: 1.2;
-  text-transform: uppercase;
   text-wrap: balance;
   color: var(--color-primary);
 }
 
 .description {
-  max-width: 580px;
+  max-width: 560px;
   font-size: 16px;
   color: var(--color-muted);
 }
@@ -51,62 +53,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 8px;
-}
-
-.visual {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  min-height: 240px;
-  overflow: hidden;
-  padding: 24px;
-  border-radius: var(--radius-lg);
-  background:
-    radial-gradient(circle at 30% 75%, rgb(255 214 150 / 85%) 0%, transparent 45%),
-    linear-gradient(180deg, #9cc0e6 0%, #f5c894 70%, #e79a5a 100%);
-}
-
-/* Dải cong xanh lá – cam gợi nhận diện thương hiệu. */
-.visual::before,
-.visual::after {
-  content: '';
-  position: absolute;
-  top: -40%;
-  right: -30%;
-  width: 120%;
-  height: 90%;
-  border-radius: 50%;
-  border-bottom: 18px solid var(--color-secondary);
-  transform: rotate(-12deg);
-}
-
-.visual::after {
-  top: -30%;
-  border-bottom-color: var(--color-accent);
-  border-bottom-width: 12px;
-  transform: rotate(-8deg);
-}
-
-.slogan {
-  position: relative;
-  z-index: 1;
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1.25;
-  text-transform: uppercase;
-  color: var(--color-white);
-  text-shadow: 0 2px 8px rgb(0 0 0 / 35%);
-}
-
-.slogan::after {
-  content: '';
-  display: block;
-  width: 64px;
-  height: 4px;
-  margin-top: 12px;
-  border-radius: 2px;
-  background: var(--color-secondary);
+  margin-top: 6px;
 }
 
 @media (min-width: 768px) {
@@ -115,31 +62,19 @@
   }
 
   .title {
-    font-size: 40px;
-  }
-
-  .visual {
-    min-height: 320px;
+    font-size: 38px;
   }
 }
 
 @media (min-width: 1024px) {
   .inner {
-    grid-template-columns: 1.1fr 1fr;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
     align-items: center;
-    padding-block: 48px;
+    gap: 48px;
+    padding-block: 56px;
   }
 
   .title {
     font-size: 42px;
-  }
-
-  .visual {
-    min-height: 400px;
-    padding: 40px;
-  }
-
-  .slogan {
-    font-size: 28px;
   }
 }

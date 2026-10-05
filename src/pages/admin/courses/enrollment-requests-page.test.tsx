@@ -35,7 +35,7 @@ describe('EnrollmentRequestsPage (duyệt đăng ký)', () => {
       adminCoursePath('COURSE_ENROLLMENTS', PENDING.courseId),
     )
     expect(
-      within(row).getByText(transferContent(PENDING.username, PENDING.courseId)),
+      within(row).getByText(transferContent(PENDING.courseId, PENDING.userId)),
     ).toBeInTheDocument()
     expect(search).toHaveBeenCalledWith(
       expect.objectContaining({ status: 'PENDING', page: 0, keyword: undefined }),

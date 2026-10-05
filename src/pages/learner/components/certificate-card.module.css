@@ -96,6 +96,11 @@
   margin-top: 18px;
 }
 
+/* Các nút tải / in nằm cùng hàng với "Xem chi tiết". */
+.inline {
+  display: contents;
+}
+
 @media (min-width: 768px) {
   .card {
     grid-template-columns: auto minmax(0, 1fr);

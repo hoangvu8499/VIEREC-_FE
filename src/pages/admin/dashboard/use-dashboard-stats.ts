@@ -31,5 +31,10 @@ export function useDashboardStats() {
     select: (page) => page.totalElements,
   })
 
-  return { totalUsers, activeUsers, pendingEnrollments }
+  const revenue = useQuery({
+    queryKey: ENROLLMENT_QUERY_KEYS.revenue,
+    queryFn: () => enrollmentService.revenue(),
+  })
+
+  return { totalUsers, activeUsers, pendingEnrollments, revenue }
 }

@@ -17,12 +17,11 @@ function lessonFormData(payload: LessonPayload): FormData {
   form.append('title', payload.title)
   form.append('instructions', payload.instructions)
   form.append('sortOrder', String(payload.sortOrder))
-  // Sửa bài: không gửi file nào thì backend giữ file cũ.
+  // Sửa bài: không gửi tài liệu thì backend giữ tài liệu cũ.
   if (payload.documentFile) form.append('documentFile', payload.documentFile)
-  if (payload.videoFile) form.append('videoFile', payload.videoFile)
   // Luôn gửi: khi sửa, thiếu `videoUrl` nghĩa là xoá link.
   form.append('videoUrl', payload.videoUrl ?? '')
-  if (payload.removeVideo && !payload.videoFile) form.append('removeVideo', 'true')
+  if (payload.removeVideo) form.append('removeVideo', 'true')
   return form
 }
 

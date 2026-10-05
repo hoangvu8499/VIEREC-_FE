@@ -1,11 +1,10 @@
-import { BadgeCheck, Search, SearchX, X } from 'lucide-react'
+import { BadgeCheck, SearchX } from 'lucide-react'
 import { useState } from 'react'
 
 import { Alert } from '@/components/common/alert'
 import { Button } from '@/components/common/button'
 import { EmptyState } from '@/components/common/empty-state'
 import { Pagination } from '@/components/common/pagination'
-import { TextField } from '@/components/form/text-field'
 import { useDocumentTitle } from '@/hooks/use-document-title'
 import { AdminPageHeader } from '@/layouts/admin/admin-page-header'
 import { AdminPanel } from '@/layouts/admin/admin-panel'
@@ -14,12 +13,12 @@ import {
   EnrollmentChangeDialog,
 } from '@/pages/admin/courses/components/enrollment-change-dialog'
 import { EnrollmentRequestTable } from '@/pages/admin/courses/components/enrollment-request-table'
+import { KeywordSearch } from '@/pages/admin/courses/components/keyword-search'
 import {
   useEnrollmentRequestParams,
   usePendingEnrollments,
 } from '@/pages/admin/courses/use-course-enrollments'
 import { apiErrorMessage } from '@/utils/api-error-message'
-import { cn } from '@/utils/cn'
 
 import styles from './components/course-list.module.css'
 
@@ -49,7 +48,13 @@ export default function EnrollmentRequestsPage() {
 
       <AdminPanel aria-label="Yêu cầu chờ duyệt">
         {/* key: ô tìm kiếm cập nhật theo URL khi bấm Back. */}
-        <KeywordSearch key={keyword ?? ''} keyword={keyword} onChange={setKeyword} />
+        <KeywordSearch
+          key={keyword ?? ''}
+          label="Tìm yêu cầu"
+          placeholder="Tên, username, SĐT học viên hoặc tên khoá học"
+          keyword={keyword}
+          onChange={setKeyword}
+        />
 
         {requests.isPending ? (
           <p className={styles.loading} aria-busy>
@@ -113,51 +118,5 @@ export default function EnrollmentRequestsPage() {
         onDone={setFlash}
       />
     </>
-  )
-}
-
-function KeywordSearch({
-  keyword,
-  onChange,
-}: {
-  keyword?: string
-  onChange: (keyword: string | undefined) => void
-}) {
-  const [draft, setDraft] = useState(keyword ?? '')
-
-  return (
-    <search className={styles.filters}>
-      <form
-        className={cn(styles.filterForm, styles.keywordOnly)}
-        onSubmit={(event) => {
-          event.preventDefault()
-          onChange(draft.trim() || undefined)
-        }}
-      >
-        <TextField
-          label="Tìm yêu cầu"
-          type="search"
-          placeholder="Tên, username, SĐT học viên hoặc tên khoá học"
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-        />
-        <div className={styles.filterActions}>
-          <Button type="submit" variant="primary">
-            <Search size={18} aria-hidden /> Tìm
-          </Button>
-          {keyword && (
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setDraft('')
-                onChange(undefined)
-              }}
-            >
-              <X size={18} aria-hidden /> Xoá lọc
-            </Button>
-          )}
-        </div>
-      </form>
-    </search>
   )
 }

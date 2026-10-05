@@ -7,6 +7,7 @@ import { adminCoursePath } from '@/constants/routes'
 import { CourseStatusBadge } from '@/pages/admin/courses/components/course-status-badge'
 import type { Course } from '@/types/course'
 import { cn } from '@/utils/cn'
+import { formatVnd } from '@/utils/format-currency'
 import { formatDateTime } from '@/utils/format-date-time'
 
 import styles from './course-list.module.css'
@@ -30,6 +31,9 @@ export function CourseTable({ courses, isFetching, onDelete }: CourseTableProps)
             <th scope="col">Giảng viên</th>
             <th scope="col" className={styles.numberCell}>
               Bài học
+            </th>
+            <th scope="col" className={styles.numberCell}>
+              Học phí
             </th>
             <th scope="col">Trạng thái</th>
             <th scope="col">Cập nhật</th>
@@ -56,6 +60,9 @@ export function CourseTable({ courses, isFetching, onDelete }: CourseTableProps)
               </td>
               <td data-label="Bài học" className={styles.numberCell}>
                 {course.lessonCount}
+              </td>
+              <td data-label="Học phí" className={styles.numberCell}>
+                {formatVnd(course.price)}
               </td>
               <td data-label="Trạng thái">
                 <CourseStatusBadge status={course.status} />

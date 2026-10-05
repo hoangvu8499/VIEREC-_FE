@@ -1,36 +1,15 @@
-import { Award, Check, Copy, Download } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Award, Eye } from 'lucide-react'
 
-import { Button } from '@/components/common/button'
-import { buttonClass } from '@/components/common/button-class'
-import { certificateVerifyPath } from '@/constants/routes'
+import { ButtonLink } from '@/components/common/button-link'
+import { CertificateActions } from '@/components/shared/certificate-actions'
+import { learnerCertificatePath } from '@/constants/routes'
 import type { Certificate } from '@/types/course'
-import { apiFileUrl } from '@/utils/api-file-url'
 import { formatDate } from '@/utils/format-date'
 
 import styles from './certificate-card.module.css'
 
 /** Chứng chỉ của học viên — thông tin là bản chụp lúc cấp, không đổi theo hồ sơ. */
 export function CertificateCard({ certificate }: { certificate: Certificate }) {
-  const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    if (!copied) return
-    const timer = window.setTimeout(() => setCopied(false), 2000)
-    return () => window.clearTimeout(timer)
-  }, [copied])
-
-  const copyVerifyLink = async () => {
-    const url = new URL(certificateVerifyPath(certificate.code), window.location.origin).toString()
-    try {
-      await navigator.clipboard.writeText(url)
-      setCopied(true)
-    } catch {
-      // Trình duyệt chặn clipboard (http, iframe...) → mở trang tra cứu để người dùng tự sao chép.
-      window.open(url, '_blank', 'noopener')
-    }
-  }
-
   return (
     <article className={styles.card} aria-labelledby={`certificate-${certificate.id}`}>
       <div className={styles.ribbon} aria-hidden>
@@ -63,22 +42,15 @@ export function CertificateCard({ certificate }: { certificate: Certificate }) {
           </div>
         </dl>
         <div className={styles.actions}>
-          <a
-            href={apiFileUrl(certificate.fileUrl)}
-            target="_blank"
-            rel="noreferrer"
-            className={buttonClass({ variant: 'accent', size: 'sm' })}
-            aria-label={`Tải chứng chỉ ${certificate.courseName} (PDF, tab mới)`}
+          <ButtonLink
+            to={learnerCertificatePath(certificate.code)}
+            variant="primary"
+            size="sm"
+            aria-label={`Xem chứng chỉ ${certificate.courseName}`}
           >
-            <Download size={16} aria-hidden /> Tải chứng chỉ (PDF)
-          </a>
-          <Button variant="outline" size="sm" onClick={() => void copyVerifyLink()}>
-            {copied ? <Check size={16} aria-hidden /> : <Copy size={16} aria-hidden />}
-            {copied ? 'Đã sao chép' : 'Sao chép link tra cứu'}
-          </Button>
-          <span className="sr-only" aria-live="polite">
-            {copied ? 'Đã sao chép link tra cứu chứng chỉ' : ''}
-          </span>
+            <Eye size={16} aria-hidden /> Xem chi tiết
+          </ButtonLink>
+          <CertificateActions certificate={certificate} size="sm" className={styles.inline} />
         </div>
       </div>
     </article>

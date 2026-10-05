@@ -1,0 +1,288 @@
+/* ---------- Form ---------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.fieldset {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.requiredNote {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.requiredNote span {
+  color: var(--color-danger);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ---------- Danh sách doanh nghiệp ---------- */
+.filters {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.filterActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.loading {
+  padding: 48px 16px;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.item:hover {
+  background: var(--color-surface);
+}
+
+.itemHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.itemName {
+  overflow-wrap: anywhere;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/* Cả dòng bấm được. */
+.itemName::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.item:has(.itemName:focus-visible) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.itemName:focus-visible {
+  outline: none;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  overflow-wrap: anywhere;
+}
+
+.badge {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ACTIVE {
+  background: var(--color-secondary-soft);
+  color: var(--color-secondary-dark);
+}
+
+.INACTIVE {
+  background: var(--color-surface);
+  color: var(--color-muted);
+}
+
+.pageFooter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+}
+
+.summary {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+/* ---------- Chi tiết ---------- */
+.layout {
+  display: grid;
+  gap: 20px;
+  align-items: start;
+}
+
+.card {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 20px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.info {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.info dt {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.info dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.managers {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.managers li {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  font-size: 14px;
+}
+
+.managers strong {
+  color: var(--color-text);
+}
+
+.membersPanel {
+  min-width: 0;
+}
+
+.membersTitle {
+  padding: 16px 16px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+@media (min-width: 768px) {
+  .fieldset {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .filters {
+    grid-template-columns: minmax(0, 1fr) 220px auto;
+    align-items: end;
+    padding: 16px 20px;
+  }
+
+  .item,
+  .pageFooter {
+    padding: 16px 20px;
+  }
+
+  .card {
+    padding: 24px;
+  }
+
+  .membersTitle {
+    padding: 20px 20px 0;
+  }
+}
+
+@media (min-width: 1280px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 360px;
+  }
+
+  .aside {
+    display: grid;
+    gap: 20px;
+    order: 1;
+  }
+}

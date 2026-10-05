@@ -170,11 +170,27 @@
   color: var(--color-primary);
 }
 
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.price {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-accent-dark);
+}
+
 .more {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 14px;
   font-size: 14px;
   font-weight: 700;
   color: var(--color-primary);

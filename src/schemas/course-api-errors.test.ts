@@ -46,7 +46,6 @@ describe('lessonApiFieldErrors', () => {
   it('maps every missing multipart field (real backend response)', () => {
     const errors = lessonApiFieldErrors(
       validationError([
-        { field: 'videoFile', message: 'Lesson video file is required' },
         { field: 'instructions', message: 'Lesson instructions are required' },
         { field: 'sortOrder', message: 'Sort order is required' },
         { field: 'documentFile', message: 'Lesson document file is required' },
@@ -58,7 +57,6 @@ describe('lessonApiFieldErrors', () => {
       instructions: LESSON_FIELD_MESSAGES.instructions.required,
       sortOrder: LESSON_FIELD_MESSAGES.sortOrder.required,
       documentFile: LESSON_FIELD_MESSAGES.documentFile.required,
-      videoFile: LESSON_FIELD_MESSAGES.videoFile.required,
     })
   })
 

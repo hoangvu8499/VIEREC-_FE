@@ -98,9 +98,8 @@ export function lessonErrorMessage(error: ApiError, fieldMessages: string[]): st
       return COURSE_GONE
     case API_ERROR_CODES.LESSON_NOT_FOUND:
       return LESSON_GONE
-    // Backend không nói file nào sai → nhắc cả hai quy định.
     case API_ERROR_CODES.FILE_TYPE_NOT_ALLOWED:
-      return `File không đúng định dạng. ${LESSON_FIELD_MESSAGES.documentFile.type}; ${LESSON_FIELD_MESSAGES.videoFile.type}.`
+      return `File không đúng định dạng. ${LESSON_FIELD_MESSAGES.documentFile.type}.`
     case API_ERROR_CODES.FILE_TOO_LARGE:
       return fileTooLargeMessage()
     default:
@@ -126,5 +125,5 @@ export function deleteErrorMessage(error: ApiError): string {
 }
 
 function fileTooLargeMessage(): string {
-  return `File quá dung lượng cho phép. ${LESSON_FIELD_MESSAGES.documentFile.tooLarge}; ${LESSON_FIELD_MESSAGES.videoFile.tooLarge}.`
+  return `File quá dung lượng cho phép. ${LESSON_FIELD_MESSAGES.documentFile.tooLarge}.`
 }

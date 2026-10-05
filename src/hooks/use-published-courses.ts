@@ -12,8 +12,14 @@ import type { Course, CourseSearchParams } from '@/types/course'
 export function usePublishedCourses({
   page = 0,
   keyword,
-}: Pick<CourseSearchParams, 'page' | 'keyword'>) {
-  const params: CourseSearchParams = { page, keyword, status: 'PUBLISHED' }
+  excludeLearning,
+}: Pick<CourseSearchParams, 'page' | 'keyword' | 'excludeLearning'>) {
+  const params: CourseSearchParams = {
+    page,
+    keyword,
+    status: 'PUBLISHED',
+    ...(excludeLearning && { excludeLearning }),
+  }
   return useQuery<PageResponse<Course>, ApiError>({
     queryKey: COURSE_QUERY_KEYS.list(params),
     queryFn: () => courseService.list(params),

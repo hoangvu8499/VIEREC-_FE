@@ -1,13 +1,16 @@
-import { SectionHeader } from '@/components/common/section-header'
 import { ROUTES } from '@/constants/routes'
+import { HomeSection } from '@/pages/home/components/home-section'
 import type { Partner } from '@/types/content'
 
 import styles from './partners-section.module.css'
 
 export function PartnersSection({ partners }: { partners: Partner[] }) {
   return (
-    <section aria-labelledby="partners-title">
-      <SectionHeader id="partners-title" title="Đối tác & Khách hàng" viewAllTo={ROUTES.PARTNERS} />
+    <HomeSection
+      id="partners-title"
+      title="Đối tác & Khách hàng"
+      viewAll={{ to: ROUTES.PARTNERS, label: 'Xem tất cả' }}
+    >
       <ul className={styles.list}>
         {partners.map((partner) => {
           const content = partner.logo ? (
@@ -29,6 +32,6 @@ export function PartnersSection({ partners }: { partners: Partner[] }) {
           )
         })}
       </ul>
-    </section>
+    </HomeSection>
   )
 }

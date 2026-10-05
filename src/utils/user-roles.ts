@@ -1,4 +1,4 @@
-import { ADMIN_ROLES, ROLE_LABELS, type RoleCode } from '@/constants/roles'
+import { ADMIN_ROLES, ROLE_LABELS, ROLE_ORDER, ROLES } from '@/constants/roles'
 import type { User } from '@/types/user'
 
 export function hasAnyRole(user: Pick<User, 'roles'> | null, roles: readonly string[]): boolean {
@@ -9,9 +9,13 @@ export function isAdmin(user: Pick<User, 'roles'> | null): boolean {
   return hasAnyRole(user, ADMIN_ROLES)
 }
 
-/** Nhãn tiếng Việt của role cao nhất (SUPER_ADMIN > ADMIN > TRAINEE). */
+/** Quản lý doanh nghiệp (khớp `@PreAuthorize("hasRole('BUSINESS')")`). */
+export function isBusinessManager(user: Pick<User, 'roles'> | null): boolean {
+  return hasAnyRole(user, [ROLES.BUSINESS])
+}
+
+/** Nhãn tiếng Việt của role cao nhất (SUPER_ADMIN > ADMIN > BUSINESS > TRAINEE). */
 export function primaryRoleLabel(user: Pick<User, 'roles'>): string {
-  const order: RoleCode[] = ['SUPER_ADMIN', 'ADMIN', 'TRAINEE']
-  const role = order.find((code) => user.roles.includes(code))
+  const role = ROLE_ORDER.find((code) => user.roles.includes(code))
   return role ? ROLE_LABELS[role] : (user.roles[0] ?? '')
 }

@@ -10,7 +10,7 @@ import { PAYMENT_METHOD_LABELS, PAYMENT_STATUS_LABELS } from '@/constants/paymen
 import { coursePath, LEARNER_ROUTES } from '@/constants/routes'
 import { useDocumentTitle } from '@/hooks/use-document-title'
 import { useMyPayments } from '@/hooks/use-payments'
-import { LearnerPageHeader } from '@/pages/learner/components/learner-page-header'
+import { AccountPageHeader } from '@/layouts/user/account-page-header'
 import type { Payment } from '@/types/payment'
 import { apiErrorMessage } from '@/utils/api-error-message'
 import { cn } from '@/utils/cn'
@@ -27,7 +27,7 @@ export default function PaymentsPage() {
 
   return (
     <>
-      <LearnerPageHeader
+      <AccountPageHeader
         title="Lịch sử thanh toán"
         description="Học phí bạn đã chuyển và trạng thái xác nhận của trung tâm."
       />

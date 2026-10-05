@@ -10,7 +10,7 @@ import { useDocumentTitle } from '@/hooks/use-document-title'
 import { useMyCertificates } from '@/hooks/use-enrollments'
 import { CertificateCard } from '@/pages/learner/components/certificate-card'
 import { CertificateIdentity } from '@/pages/learner/components/certificate-identity'
-import { LearnerPageHeader } from '@/pages/learner/components/learner-page-header'
+import { AccountPageHeader } from '@/layouts/user/account-page-header'
 import { useAuthStore } from '@/stores/auth-store'
 import { apiErrorMessage } from '@/utils/api-error-message'
 
@@ -25,7 +25,7 @@ export default function CertificatesPage() {
 
   return (
     <>
-      <LearnerPageHeader
+      <AccountPageHeader
         title="Chứng chỉ"
         description="Chứng chỉ được cấp sau khi bạn hoàn thành khoá học."
         action={

@@ -1,10 +1,10 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 
 import { cn } from '@/utils/cn'
 
 import styles from './icon-button.module.css'
 
-interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IconButtonProps extends ComponentProps<'button'> {
   /** Nhãn cho trình đọc màn hình (bắt buộc vì nút chỉ có icon). */
   label: string
   children: ReactNode

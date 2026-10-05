@@ -70,21 +70,6 @@
   color: var(--color-text);
 }
 
-.exam {
-  display: grid;
-  gap: 6px;
-}
-
-.examHint {
-  margin: 0;
-  font-size: 13px;
-  color: var(--color-muted);
-}
-
-.examNotice {
-  grid-column: 1 / -1;
-}
-
 /* ---------- Bố cục bài học ---------- */
 .layout {
   display: grid;
@@ -259,11 +244,6 @@
     grid-template-columns: 1fr auto;
     align-items: center;
     padding: 20px 24px;
-  }
-
-  .exam {
-    justify-items: end;
-    text-align: right;
   }
 
   .lesson {

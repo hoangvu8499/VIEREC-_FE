@@ -26,14 +26,35 @@ describe('EnrollPage (góc học viên)', () => {
       'href',
       '/khoa-hoc/7',
     )
-    expect(screen.getByText(/1 khoá học đang mở/)).toBeInTheDocument()
-    expect(list).toHaveBeenCalledWith({ page: 0, keyword: undefined, status: 'PUBLISHED' })
+    expect(screen.getByText(/1 khoá học bạn có thể đăng ký/)).toBeInTheDocument()
+    expect(list).toHaveBeenCalledWith({
+      page: 0,
+      keyword: undefined,
+      status: 'PUBLISHED',
+      excludeLearning: true,
+    })
 
     await user.type(screen.getByLabelText('Tìm khoá học'), 'pccc{Enter}')
 
-    expect(list).toHaveBeenLastCalledWith({ page: 0, keyword: 'pccc', status: 'PUBLISHED' })
+    expect(list).toHaveBeenLastCalledWith({
+      page: 0,
+      keyword: 'pccc',
+      status: 'PUBLISHED',
+      excludeLearning: true,
+    })
     expect(router.state.location.search).toBe('?q=pccc')
     expect(await screen.findByText(/Tìm thấy 1 khoá học cho “pccc”/)).toBeInTheDocument()
+  })
+
+  it('points to my courses when every open course is already taken', async () => {
+    vi.spyOn(courseService, 'list').mockResolvedValue(coursePage([]))
+    renderPage()
+
+    expect(await screen.findByText('Chưa có khoá học mới để đăng ký')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Xem khoá học của tôi' })).toHaveAttribute(
+      'href',
+      LEARNER_ROUTES.MY_COURSES,
+    )
   })
 
   it('shows a retry action when loading fails', async () => {

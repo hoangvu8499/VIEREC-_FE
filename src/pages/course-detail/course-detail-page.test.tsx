@@ -87,8 +87,10 @@ describe('CourseDetailPage (người dùng)', () => {
     const dialog = screen.getByRole('alertdialog', { name: 'Chuyển khoản học phí' })
     expect(within(dialog).getByRole('img', { name: /Mã QR chuyển khoản/ })).toBeInTheDocument()
     expect(within(dialog).getByText(BANK_ACCOUNT.accountNumber)).toBeInTheDocument()
+    // Số tiền là giá khoá, có trong cả mã QR.
+    expect(within(dialog).getByText(/^1\.500\.000\s₫$/)).toBeInTheDocument()
     expect(
-      within(dialog).getByText(transferContent(USER_FIXTURE.username, COURSE_DETAIL_FIXTURE.id)),
+      within(dialog).getByText(transferContent(COURSE_DETAIL_FIXTURE.id, USER_FIXTURE.id)),
     ).toBeInTheDocument()
     expect(enroll).not.toHaveBeenCalled()
 

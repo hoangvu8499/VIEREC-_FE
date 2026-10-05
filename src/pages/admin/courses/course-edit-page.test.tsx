@@ -46,6 +46,10 @@ describe('CourseEditPage', () => {
 
     await user.clear(name)
     await user.type(name, 'PCCC nâng cao')
+    const price = screen.getByLabelText(/^Học phí \(VND\)\s*\*?$/)
+    expect(price).toHaveValue(String(COURSE_DETAIL_FIXTURE.price))
+    await user.clear(price)
+    await user.type(price, '2000000')
     await user.selectOptions(screen.getByLabelText(/^Trạng thái\s*\*?$/), 'Lưu trữ')
     await user.click(screen.getByRole('button', { name: 'Lưu thay đổi' }))
 
@@ -53,6 +57,7 @@ describe('CourseEditPage', () => {
       name: 'PCCC nâng cao',
       description: COURSE_DETAIL_FIXTURE.description,
       instructorId: 3,
+      price: 2000000,
       status: 'ARCHIVED',
     })
     expect(await screen.findByText('Chi tiết: Đã lưu thay đổi của khoá học.')).toBeInTheDocument()

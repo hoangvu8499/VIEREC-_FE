@@ -26,6 +26,7 @@ import { useAuthStore } from '@/stores/auth-store'
 import type { CourseDetail, Lesson } from '@/types/course'
 import { apiErrorMessage } from '@/utils/api-error-message'
 import { cn } from '@/utils/cn'
+import { formatVnd } from '@/utils/format-currency'
 import { formatDate } from '@/utils/format-date'
 
 import styles from './course-detail-page.module.css'
@@ -124,6 +125,10 @@ function CourseContent({ course }: { course: CourseDetail }) {
               <Icon size={64} strokeWidth={1.5} />
             </div>
             <div className={styles.summaryBody}>
+              <p className={styles.price}>
+                <span>Học phí</span>
+                <strong>{formatVnd(course.price)}</strong>
+              </p>
               <p className={styles.summaryTitle}>Khoá học gồm</p>
               <ul className={styles.includes}>
                 <li>

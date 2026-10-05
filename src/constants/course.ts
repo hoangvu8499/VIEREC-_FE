@@ -4,6 +4,7 @@ import type {
   EnrollmentAdminSearchParams,
   EnrollmentSearchParams,
   EnrollmentStatus,
+  MonthlyRevenueParams,
 } from '@/types/course'
 
 /** Tạo khoá / bài học xong thì invalidate `COURSE_QUERY_KEYS.all`. */
@@ -35,10 +36,6 @@ export const LESSON_FILE_RULES = {
     extensions: ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'txt'],
     maxBytes: 50 * 1024 * 1024,
   },
-  video: {
-    extensions: ['mp4', 'webm', 'mov', 'mkv'],
-    maxBytes: 500 * 1024 * 1024,
-  },
 } as const
 
 /**
@@ -47,6 +44,9 @@ export const LESSON_FILE_RULES = {
  */
 export const ENROLLMENT_QUERY_KEYS = {
   all: ['enrollments'],
+  /** Cùng tiền tố `all` → duyệt / từ chối xong là doanh thu tự tính lại. */
+  revenue: ['enrollments', 'revenue'],
+  monthlyRevenue: (params: MonthlyRevenueParams) => ['enrollments', 'revenue', 'monthly', params],
   mine: (params: EnrollmentSearchParams) => ['enrollments', 'mine', params],
   byCourse: (courseId: number, params: EnrollmentSearchParams) => [
     'enrollments',
@@ -60,6 +60,7 @@ export const ENROLLMENT_QUERY_KEYS = {
 export const CERTIFICATE_QUERY_KEYS = {
   all: ['certificates'],
   mine: (page: number) => ['certificates', 'mine', page],
+  myDetail: (code: string) => ['certificates', 'mine', 'detail', code],
   verify: (code: string) => ['certificates', 'verify', code],
 } as const
 
@@ -91,6 +92,11 @@ export const LEARNING_STATUSES = [
 
 /** Tỉ lệ thời lượng video phải xem để mở nút "Thi chứng chỉ". */
 export const EXAM_WATCH_RATIO = 0.8
+
+/** Tiến độ xem video của học viên đang đăng nhập (`/courses/{id}/my-progress`). */
+export const PROGRESS_QUERY_KEYS = {
+  mine: (courseId: number) => ['my-progress', courseId],
+} as const
 
 /** Số lượt ghi danh / chứng chỉ mỗi trang. */
 export const ENROLLMENT_PAGE_SIZE = 10

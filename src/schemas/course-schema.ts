@@ -2,7 +2,9 @@ import { z } from 'zod'
 
 import { COURSE_STATUSES, LESSON_FILE_RULES } from '@/constants/course'
 import type { CourseDetail, CoursePayload, Lesson, LessonPayload } from '@/types/course'
+import { formatVnd } from '@/utils/format-currency'
 import { formatFileSize } from '@/utils/format-file-size'
+import { youtubeVideoId } from '@/utils/youtube-video-id'
 
 /** Giới hạn độ dài theo `CreateCourseRequest` / `CreateLessonRequest` của backend. */
 export const COURSE_NAME_MAX = 200
@@ -10,9 +12,11 @@ export const LESSON_TITLE_MAX = 200
 export const LONG_TEXT_MAX = 10_000
 export const SORT_ORDER_MAX = 10_000
 export const VIDEO_URL_MAX = 2048
+/** Học phí (VND), khớp `CourseRequest.PRICE_MIN/MAX` của backend. 1.000 ₫ là mức chuyển khoản tối thiểu. */
+export const COURSE_PRICE_MIN = 1_000
+export const COURSE_PRICE_MAX = 1_000_000_000
 
 const DOC = LESSON_FILE_RULES.document
-const VIDEO = LESSON_FILE_RULES.video
 
 function extensionList(extensions: readonly string[]): string {
   return extensions.map((extension) => extension.toUpperCase()).join(', ')
@@ -33,6 +37,10 @@ export const COURSE_FIELD_MESSAGES = {
     invalid: 'Giảng viên không hợp lệ. Vui lòng chọn lại.',
     notFound: 'Không tìm thấy tài khoản giảng viên này. Vui lòng chọn người khác.',
     notActive: 'Tài khoản giảng viên chưa được kích hoạt. Vui lòng chọn người khác.',
+  },
+  price: {
+    required: 'Vui lòng nhập học phí',
+    invalid: `Học phí là số tiền từ ${formatVnd(COURSE_PRICE_MIN)} đến ${formatVnd(COURSE_PRICE_MAX)}`,
   },
   status: { required: 'Vui lòng chọn trạng thái', invalid: 'Trạng thái không hợp lệ' },
 } as const
@@ -56,14 +64,9 @@ export const LESSON_FIELD_MESSAGES = {
     type: `Tài liệu phải là file ${extensionList(DOC.extensions)}`,
     tooLarge: `Tài liệu tối đa ${formatFileSize(DOC.maxBytes)}`,
   },
-  videoFile: {
-    required: 'Vui lòng chọn file video',
-    type: `Video phải là file ${extensionList(VIDEO.extensions)}`,
-    tooLarge: `Video tối đa ${formatFileSize(VIDEO.maxBytes)}`,
-  },
   videoUrl: {
     required: 'Vui lòng nhập link video',
-    invalid: 'Link video phải bắt đầu bằng http:// hoặc https:// và không có khoảng trắng',
+    invalid: 'Chỉ nhận link YouTube, vd. https://www.youtube.com/watch?v=… hoặc https://youtu.be/…',
     tooLong: `Link video tối đa ${VIDEO_URL_MAX.toLocaleString('vi-VN')} ký tự`,
   },
   removeVideo: { required: 'Lựa chọn gỡ video không hợp lệ' },
@@ -109,6 +112,15 @@ export const courseSchema = z.object({
   name: requiredText(C.name.required, COURSE_NAME_MAX, C.name.tooLong),
   description: requiredText(C.description.required, LONG_TEXT_MAX, C.description.tooLong),
   instructorId: z.number(C.instructorId.required).int().positive(C.instructorId.required),
+  // Ô chữ để nhập được cả "100.000"; bỏ dấu chấm / dấu cách rồi đổi sang số.
+  price: z
+    .string(C.price.required)
+    .transform((value) => value.replace(/[.\s]/g, ''))
+    .pipe(
+      z.string().min(1, { error: C.price.required, abort: true }).regex(/^\d+$/, C.price.invalid),
+    )
+    .transform(Number)
+    .pipe(z.number().min(COURSE_PRICE_MIN, C.price.invalid).max(COURSE_PRICE_MAX, C.price.invalid)),
   status: z.enum(COURSE_STATUSES, C.status.required),
 })
 
@@ -116,12 +128,13 @@ export type CourseFormInput = z.input<typeof courseSchema>
 export type CourseFormValues = z.output<typeof courseSchema>
 export type CourseField = keyof typeof COURSE_FIELD_MESSAGES
 
-/** Tạo mới: `instructorId` chưa chọn là `undefined`, trạng thái mặc định là bản nháp. Sửa: lấy từ khoá. */
+/** Tạo mới: `instructorId` chưa chọn là `undefined`, học phí trống, trạng thái bản nháp. Sửa: lấy từ khoá. */
 export function courseFormValues(course?: CourseDetail): Partial<CourseFormInput> {
   return {
     name: course?.name ?? '',
     description: course?.description ?? '',
     instructorId: course?.instructorId,
+    price: course ? String(course.price) : '',
     status: course?.status ?? 'DRAFT',
   }
 }
@@ -130,10 +143,7 @@ export function toCoursePayload(values: CourseFormValues): CoursePayload {
   return values
 }
 
-/** Link tuyệt đối http(s), không khoảng trắng (khớp `VIDEO_URL_PATTERN` của backend). Rỗng = không có link. */
-const VIDEO_URL_REGEX = /^https?:\/\/\S+$/i
-
-/** Tạo: bắt buộc tài liệu. Sửa: file nào để trống thì giữ file cũ. Video luôn tuỳ chọn (file và/hoặc link). */
+/** Tạo: bắt buộc tài liệu. Sửa: để trống thì giữ tài liệu cũ. Video tuỳ chọn, chỉ là link YouTube (khớp `@YoutubeUrl` BE). */
 function lessonSchemaOf(isCreate: boolean) {
   return z.object({
     title: requiredText(L.title.required, LESSON_TITLE_MAX, L.title.tooLong),
@@ -148,12 +158,11 @@ function lessonSchemaOf(isCreate: boolean) {
       .transform(Number)
       .pipe(z.number().min(1, L.sortOrder.invalid).max(SORT_ORDER_MAX, L.sortOrder.invalid)),
     documentFile: fileRule(DOC, L.documentFile, isCreate),
-    videoFile: fileRule(VIDEO, L.videoFile, false),
     videoUrl: z
       .string()
       .trim()
       .max(VIDEO_URL_MAX, L.videoUrl.tooLong)
-      .refine((url) => url === '' || VIDEO_URL_REGEX.test(url), L.videoUrl.invalid),
+      .refine((url) => url === '' || youtubeVideoId(url) !== null, L.videoUrl.invalid),
     removeVideo: z.boolean(),
   })
 }
@@ -174,7 +183,6 @@ export function lessonFormValues(lesson?: Lesson, sortOrder = 1): Partial<Lesson
     instructions: lesson?.instructions ?? '',
     sortOrder: String(lesson?.sortOrder ?? sortOrder),
     documentFile: undefined,
-    videoFile: undefined,
     videoUrl: lesson?.videoUrl ?? '',
     removeVideo: false,
   }
@@ -187,10 +195,8 @@ export function toLessonPayload(values: LessonFormValues): LessonPayload {
 /** Chuỗi `accept` cho input file, vd. `.pdf,.docx`. */
 export const LESSON_FILE_ACCEPT = {
   document: DOC.extensions.map((extension) => `.${extension}`).join(','),
-  video: VIDEO.extensions.map((extension) => `.${extension}`).join(','),
 } as const
 
 export const LESSON_FILE_HINTS = {
   document: `${extensionList(DOC.extensions)} · tối đa ${formatFileSize(DOC.maxBytes)}`,
-  video: `${extensionList(VIDEO.extensions)} · tối đa ${formatFileSize(VIDEO.maxBytes)}`,
 } as const

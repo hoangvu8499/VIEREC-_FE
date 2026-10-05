@@ -1,0 +1,35 @@
+.exam {
+  display: grid;
+  gap: 6px;
+}
+
+.examButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.examButtons > * {
+  flex: 1 1 180px;
+}
+
+.hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .exam {
+    justify-items: end;
+    text-align: right;
+  }
+
+  .examButtons {
+    justify-content: flex-end;
+  }
+
+  .examButtons > * {
+    flex: 0 0 auto;
+  }
+}

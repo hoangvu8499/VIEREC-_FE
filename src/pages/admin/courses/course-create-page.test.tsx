@@ -85,6 +85,8 @@ describe('CourseCreatePage', () => {
     })
     expect(screen.getByRole('button', { name: /^Đổi giảng viên/ })).toBeInTheDocument()
 
+    await user.type(screen.getByLabelText(/^Học phí \(VND\)\s*\*?$/), '250.000')
+    expect(screen.getByText(/^250\.000\s₫ — số tiền học viên chuyển khoản/)).toBeInTheDocument()
     await user.selectOptions(screen.getByLabelText(/^Trạng thái\s*\*?$/), 'Đã xuất bản')
     await user.click(screen.getByRole('button', { name: 'Tạo khoá học' }))
 
@@ -92,6 +94,7 @@ describe('CourseCreatePage', () => {
       name: 'PCCC cơ bản',
       description: 'Kiến thức PCCC',
       instructorId: 3,
+      price: 250000,
       status: 'PUBLISHED',
     })
     expect(
@@ -113,6 +116,7 @@ describe('CourseCreatePage', () => {
     await user.type(screen.getByLabelText(/^Tên khoá học\s*\*?$/), 'PCCC')
     await user.type(screen.getByLabelText(/^Mô tả\s*\*?$/), 'Mô tả')
     await pickInstructor(user)
+    await user.type(screen.getByLabelText(/^Học phí \(VND\)\s*\*?$/), '100000')
     await user.click(screen.getByRole('button', { name: 'Tạo khoá học' }))
 
     expect(await screen.findByRole('alert')).toHaveTextContent(

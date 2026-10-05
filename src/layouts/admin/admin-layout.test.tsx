@@ -80,6 +80,8 @@ describe('AdminLayout', () => {
       'Tổng quan',
       'Khoá học',
       'Duyệt đăng ký',
+      'Doanh thu',
+      'Doanh nghiệp',
       'Điểm hỗ trợ sự cố',
       'Người dùng',
       'Phân quyền',
@@ -95,7 +97,7 @@ describe('AdminLayout', () => {
     renderAdmin()
 
     const menu = screen.getByRole('navigation', { name: 'Quản trị' })
-    expect(within(menu).getAllByRole('link')).toHaveLength(6)
+    expect(within(menu).getAllByRole('link')).toHaveLength(8)
     expect(within(menu).getByRole('link', { name: 'Phân quyền' })).toBeInTheDocument()
     expect(screen.getAllByText('Quản trị viên').length).toBeGreaterThan(0)
   })

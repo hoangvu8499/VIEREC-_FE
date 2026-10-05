@@ -246,6 +246,24 @@
   padding: 20px;
 }
 
+.price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--color-border);
+  color: var(--color-muted);
+}
+
+.price strong {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--color-accent-dark);
+}
+
 .summaryTitle {
   font-weight: 800;
   color: var(--color-text);

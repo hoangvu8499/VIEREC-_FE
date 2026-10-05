@@ -33,3 +33,15 @@ export interface Partner {
   logo?: string
   url?: string
 }
+
+export interface Service {
+  id: string
+  icon: LucideIcon
+  title: string
+  description: string
+  path: string
+  /** Nhãn link hành động, vd. "Xem giải pháp". */
+  action: string
+  /** Khẩn cấp: tô màu đỏ. */
+  urgent?: boolean
+}

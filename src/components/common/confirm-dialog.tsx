@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { Alert } from '@/components/common/alert'
 import { Button } from '@/components/common/button'
 import { cn } from '@/utils/cn'
+import { trapFocus } from '@/utils/trap-focus'
 
 import styles from './confirm-dialog.module.css'
 
@@ -117,20 +118,4 @@ export function ConfirmDialog({
     </div>,
     document.body,
   )
-}
-
-function trapFocus(event: KeyboardEvent, container: HTMLElement | null) {
-  const focusable = container?.querySelectorAll<HTMLElement>(
-    'button:not(:disabled), a[href], input:not(:disabled)',
-  )
-  const first = focusable?.[0]
-  const last = focusable?.[focusable.length - 1]
-  if (!first || !last) return
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault()
-    last.focus()
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault()
-    first.focus()
-  }
 }

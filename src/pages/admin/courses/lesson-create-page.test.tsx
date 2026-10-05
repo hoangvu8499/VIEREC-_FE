@@ -9,7 +9,6 @@ import { COURSE_DETAIL_FIXTURE, LESSON_FIXTURE } from '@/test/fixtures'
 import { renderRoutes } from '@/test/render-routes'
 
 const DOC = new File(['%PDF'], 'bai-4.pdf', { type: 'application/pdf' })
-const VIDEO = new File(['video'], 'bai-4.mp4', { type: 'video/mp4' })
 
 function renderPage(path = adminCoursePath('LESSON_CREATE', COURSE_DETAIL_FIXTURE.id)) {
   return renderRoutes([{ path: ADMIN_ROUTES.LESSON_CREATE, element: <LessonCreatePage /> }], path)
@@ -19,7 +18,6 @@ async function fillForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(await screen.findByLabelText(/^Tên bài học\s*\*?$/), 'Thoát nạn')
   await user.type(screen.getByLabelText(/^Hướng dẫn học\s*\*?$/), 'Đọc tài liệu rồi xem video.')
   await user.upload(screen.getByLabelText(/^Tài liệu\s*\*?$/), DOC)
-  await user.upload(screen.getByLabelText('File video'), VIDEO)
 }
 
 describe('LessonCreatePage', () => {
@@ -63,18 +61,18 @@ describe('LessonCreatePage', () => {
 
     await user.click(await screen.findByRole('button', { name: 'Tạo bài học' }))
     expect(await screen.findByText(LESSON_FIELD_MESSAGES.documentFile.required)).toBeInTheDocument()
-    expect(screen.queryByText(LESSON_FIELD_MESSAGES.videoFile.required)).not.toBeInTheDocument()
+    expect(screen.queryByText(LESSON_FIELD_MESSAGES.videoUrl.required)).not.toBeInTheDocument()
 
-    await user.upload(screen.getByLabelText('File video'), new File(['x'], 'bai-giang.pdf'))
-    expect(await screen.findByText(LESSON_FIELD_MESSAGES.videoFile.type)).toBeInTheDocument()
+    await user.upload(screen.getByLabelText(/^Tài liệu\s*\*?$/), new File(['x'], 'bai-giang.exe'))
+    expect(await screen.findByText(LESSON_FIELD_MESSAGES.documentFile.type)).toBeInTheDocument()
     expect(createLesson).not.toHaveBeenCalled()
   })
 
-  it('creates a lesson with a video link instead of a video file', async () => {
+  it('creates a lesson with a YouTube link and refuses other video links', async () => {
     const user = userEvent.setup()
     const createLesson = vi.spyOn(courseService, 'createLesson').mockResolvedValue({
       ...LESSON_FIXTURE,
-      videoUrl: 'https://youtu.be/abc',
+      videoUrl: 'https://youtu.be/dQw4w9WgXcQ',
       files: LESSON_FIXTURE.files.filter((file) => file.fileType === 'DOCUMENT'),
     })
     renderPage()
@@ -82,22 +80,21 @@ describe('LessonCreatePage', () => {
     await user.type(await screen.findByLabelText(/^Tên bài học\s*\*?$/), 'Thoát nạn')
     await user.type(screen.getByLabelText(/^Hướng dẫn học\s*\*?$/), 'Xem video.')
     await user.upload(screen.getByLabelText(/^Tài liệu\s*\*?$/), DOC)
-    const link = screen.getByLabelText('Link video')
-    await user.type(link, 'youtu.be/abc')
+    const link = screen.getByLabelText('Link YouTube')
+    await user.type(link, 'https://drive.google.com/file/d/xyz/view')
     await user.click(screen.getByRole('button', { name: 'Tạo bài học' }))
     expect(await screen.findByText(LESSON_FIELD_MESSAGES.videoUrl.invalid)).toBeInTheDocument()
 
     await user.clear(link)
-    await user.type(link, 'https://youtu.be/abc')
+    await user.type(link, 'https://youtu.be/dQw4w9WgXcQ')
     await user.click(screen.getByRole('button', { name: 'Tạo bài học' }))
 
     expect(createLesson.mock.calls[0]?.[1]).toMatchObject({
-      videoFile: undefined,
-      videoUrl: 'https://youtu.be/abc',
+      videoUrl: 'https://youtu.be/dQw4w9WgXcQ',
     })
     expect(await screen.findByRole('link', { name: 'Mở link video (tab mới)' })).toHaveAttribute(
       'href',
-      'https://youtu.be/abc',
+      'https://youtu.be/dQw4w9WgXcQ',
     )
   })
 
@@ -128,7 +125,6 @@ describe('LessonCreatePage', () => {
         instructions: 'Đọc tài liệu rồi xem video.',
         sortOrder: 4,
         documentFile: DOC,
-        videoFile: VIDEO,
         videoUrl: '',
         removeVideo: false,
       },

@@ -10,7 +10,7 @@ import { useMyCertificates, useMyEnrollments } from '@/hooks/use-enrollments'
 import { usePublishedCourses } from '@/hooks/use-published-courses'
 import { CertificateIdentity } from '@/pages/learner/components/certificate-identity'
 import { EnrollmentItem } from '@/pages/learner/components/enrollment-item'
-import { LearnerPageHeader } from '@/pages/learner/components/learner-page-header'
+import { AccountPageHeader } from '@/layouts/user/account-page-header'
 import { useAuthStore } from '@/stores/auth-store'
 import { cn } from '@/utils/cn'
 
@@ -85,7 +85,8 @@ function ContinueLearning() {
 }
 
 function LatestCourses() {
-  const courses = usePublishedCourses({ page: 0 })
+  // Như trang "Đăng ký khoá học": bỏ khoá đã được duyệt / đã hoàn thành.
+  const courses = usePublishedCourses({ page: 0, excludeLearning: true })
   const items = courses.data?.content.slice(0, LATEST_LIMIT) ?? []
 
   // Lỗi / chưa có khoá: ẩn khối (đã có trang "Đăng ký khoá học" báo lỗi chi tiết).
@@ -124,7 +125,7 @@ export default function OverviewPage() {
 
   return (
     <>
-      <LearnerPageHeader
+      <AccountPageHeader
         title="Góc học viên"
         description="Khoá học, chứng chỉ và hồ sơ của bạn tại VIEREC Academy."
       />

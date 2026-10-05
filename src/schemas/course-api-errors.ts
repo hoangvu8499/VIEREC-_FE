@@ -7,13 +7,13 @@ import {
 } from '@/schemas/course-schema'
 import type { ApiError } from '@/types/api'
 
-type FieldMessages = Record<string, { required: string; tooLong?: string; invalid?: string }>
+export type FieldMessages = Record<string, { required: string; tooLong?: string; invalid?: string }>
 
 /**
  * 400 theo field → tiếng Việt, theo mẫu message của `ValidationMessages.properties` backend
  * ("... is required", "... must be at most ...", "... must be at least ...").
  */
-function fieldErrors<F extends string>(
+export function fieldErrors<F extends string>(
   error: ApiError,
   messages: FieldMessages,
 ): Partial<Record<F, string>> {

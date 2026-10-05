@@ -3,15 +3,17 @@ import { useState } from 'react'
 
 import { Alert } from '@/components/common/alert'
 import { Button } from '@/components/common/button'
+import { ButtonLink } from '@/components/common/button-link'
 import { EmptyState } from '@/components/common/empty-state'
 import { Pagination } from '@/components/common/pagination'
 import { TextField } from '@/components/form/text-field'
 import { CourseCard } from '@/components/shared/course-card'
 import { EnrollAction } from '@/components/shared/enroll-action'
+import { LEARNER_ROUTES } from '@/constants/routes'
 import { useDocumentTitle } from '@/hooks/use-document-title'
 import { usePublishedCourseParams } from '@/hooks/use-published-course-params'
 import { usePublishedCourses } from '@/hooks/use-published-courses'
-import { LearnerPageHeader } from '@/pages/learner/components/learner-page-header'
+import { AccountPageHeader } from '@/layouts/user/account-page-header'
 import { apiErrorMessage } from '@/utils/api-error-message'
 
 import styles from './enroll-page.module.css'
@@ -21,17 +23,18 @@ const numberFormatter = new Intl.NumberFormat('vi-VN')
 export default function EnrollPage() {
   useDocumentTitle('Đăng ký khoá học')
   const { page, keyword, setPage, setKeyword } = usePublishedCourseParams()
-  const courses = usePublishedCourses({ page, keyword })
+  // Khoá đã được duyệt / đã hoàn thành nằm ở "Khoá học của tôi", không hiện lại ở đây.
+  const courses = usePublishedCourses({ page, keyword, excludeLearning: true })
   const [draft, setDraft] = useState(keyword ?? '')
   const data = courses.data
 
   return (
     <>
-      <LearnerPageHeader
+      <AccountPageHeader
         title="Đăng ký khoá học"
         description={
           data && !keyword && data.totalElements > 0
-            ? `${numberFormatter.format(data.totalElements)} khoá học đang mở. Chọn khoá để xem nội dung và bắt đầu học.`
+            ? `${numberFormatter.format(data.totalElements)} khoá học bạn có thể đăng ký. Chọn khoá để xem nội dung và bắt đầu học.`
             : 'Chọn khoá học để xem nội dung và bắt đầu học.'
         }
       />
@@ -136,8 +139,13 @@ export default function EnrollPage() {
         ) : (
           <EmptyState
             icon={GraduationCap}
-            title="Khoá học sắp ra mắt"
-            description="Các khoá học đang được chuẩn bị. Vui lòng quay lại sau."
+            title="Chưa có khoá học mới để đăng ký"
+            description="Bạn đã đăng ký mọi khoá học đang mở, hoặc khoá học đang được chuẩn bị. Vui lòng quay lại sau."
+            action={
+              <ButtonLink to={LEARNER_ROUTES.MY_COURSES} variant="outline">
+                Xem khoá học của tôi
+              </ButtonLink>
+            }
           />
         )}
       </section>

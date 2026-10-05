@@ -14,6 +14,14 @@ export const certificateService = {
     return data.data
   },
 
+  /** Chứng chỉ của người đang đăng nhập theo mã. Của người khác / không có → 404 `CERTIFICATE_NOT_FOUND`. */
+  async getMine(code: string): Promise<Certificate> {
+    const { data } = await http.get<ApiResponse<Certificate>>(
+      `/auth/me/certificates/${encodeURIComponent(code)}`,
+    )
+    return data.data
+  },
+
   /** Công khai. Không có → 404 `CERTIFICATE_NOT_FOUND`. */
   async verify(code: string): Promise<CertificateVerification> {
     const { data } = await http.get<ApiResponse<CertificateVerification>>(

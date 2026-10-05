@@ -1,0 +1,240 @@
+.panel {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.padded {
+  padding: 20px 16px;
+}
+
+.panelTitle {
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.loading {
+  padding: 48px 16px;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.headerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.stat {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat dt {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.stat dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+}
+
+.summary {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 20px;
+  margin: 0;
+}
+
+.info dt {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.info dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* ---------- Form ---------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.fieldset {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.requiredNote {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.requiredNote span {
+  color: var(--color-danger);
+}
+
+.formFooter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ---------- Ghi danh ---------- */
+.memberChecks {
+  display: grid;
+  gap: 8px;
+  max-height: 420px;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.checkAll {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.total {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.total strong {
+  font-size: 20px;
+}
+
+.result {
+  display: grid;
+  gap: 16px;
+}
+
+.qr {
+  display: grid;
+  gap: 16px;
+  align-items: center;
+  justify-items: center;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.qrImage {
+  width: 220px;
+  max-width: 100%;
+}
+
+.transfer {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+}
+
+.transfer > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.transfer dt {
+  color: var(--color-muted);
+}
+
+.transfer dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.names {
+  margin: 4px 0 0;
+  padding-left: 20px;
+}
+
+@media (min-width: 768px) {
+  .padded {
+    padding: 24px;
+  }
+
+  .fieldset {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer {
+    padding: 16px 20px;
+  }
+
+  .qr {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+}

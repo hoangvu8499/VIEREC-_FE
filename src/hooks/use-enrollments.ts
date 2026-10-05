@@ -35,6 +35,15 @@ export function useMyCertificates(page = 0) {
   })
 }
 
+export function useMyCertificate(code: string | undefined) {
+  return useQuery<Certificate, ApiError>({
+    queryKey: CERTIFICATE_QUERY_KEYS.myDetail(code ?? ''),
+    queryFn: () => certificateService.getMine(code ?? ''),
+    enabled: Boolean(code),
+    retry: (count, error) => error.code !== API_ERROR_CODES.CERTIFICATE_NOT_FOUND && count < 1,
+  })
+}
+
 /** Ghi danh / huỷ đổi cả danh sách của tôi lẫn `myEnrollmentStatus` của khoá học. */
 function useInvalidateEnrollments() {
   const queryClient = useQueryClient()

@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 
 import { ROUTES } from '@/constants/routes'
-import type { Category, NewsItem, Partner, Stat } from '@/types/content'
+import type { Category, NewsItem, Partner, Service, Stat } from '@/types/content'
 
 // Dữ liệu tĩnh tạm thời theo thiết kế. Khi có API: thay bằng service + query hook,
 // giữ nguyên kiểu dữ liệu để component không phải sửa.
@@ -81,6 +81,34 @@ export const CATEGORIES: Category[] = [
     path: ROUTES.LIBRARY,
     icon: FileText,
     color: 'var(--color-primary)',
+  },
+]
+
+export const SERVICES: Service[] = [
+  {
+    id: 'emergency',
+    icon: Siren,
+    title: 'Báo sự cố khẩn cấp 24/7',
+    description: 'Kết nối nhanh với Trung tâm Ứng phó sự cố VIEREC khi có sự cố môi trường.',
+    path: ROUTES.EMERGENCY_REPORT,
+    action: 'Gửi thông tin ngay',
+    urgent: true,
+  },
+  {
+    id: 'enterprise',
+    icon: Building2,
+    title: 'Giải pháp cho doanh nghiệp',
+    description: 'Đào tạo, quản lý chứng chỉ và nâng cao năng lực HSE cho đội ngũ của bạn.',
+    path: ROUTES.ENTERPRISE,
+    action: 'Xem giải pháp',
+  },
+  {
+    id: 'esg',
+    icon: Leaf,
+    title: 'Đồng hành ESG',
+    description: 'Cùng doanh nghiệp hướng tới mục tiêu ESG và phát triển bền vững.',
+    path: ROUTES.ABOUT,
+    action: 'Tìm hiểu thêm',
   },
 ]
 

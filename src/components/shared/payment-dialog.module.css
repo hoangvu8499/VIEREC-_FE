@@ -10,8 +10,8 @@
 
 .qr {
   width: 100%;
-  max-width: 220px;
-  height: auto;
+  max-width: 240px;
+  aspect-ratio: 1;
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
 }

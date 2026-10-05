@@ -1,3 +1,5 @@
+import type { PageResponse } from '@/types/api'
+
 export type CourseStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
 
 /**
@@ -18,6 +20,8 @@ export interface Course {
   instructorName: string
   createdByUsername: string
   lessonCount: number
+  /** Học phí (VND). Khoá tạo trước khi có giá: 100.000. */
+  price: number
   /** Trạng thái ghi danh của người đang xem; `null` khi chưa ghi danh hoặc chưa đăng nhập. */
   myEnrollmentStatus: EnrollmentStatus | null
   /** ISO 8601, giờ server (không kèm múi giờ). */
@@ -32,6 +36,8 @@ export interface CourseSearchParams {
   keyword?: string
   /** Chỉ admin lọc được; người khác luôn chỉ thấy PUBLISHED. */
   status?: CourseStatus
+  /** Bỏ các khoá người đang đăng nhập đã được duyệt / đã hoàn thành (khoá chờ duyệt vẫn hiện). */
+  excludeLearning?: boolean
 }
 
 /** Body `POST /courses` và `PUT /courses/{id}` — tất cả bắt buộc. */
@@ -40,12 +46,14 @@ export interface CoursePayload {
   description: string
   /** Id của một user đang ACTIVE (backend không có role giảng viên riêng). */
   instructorId: number
+  /** VND, từ 1.000 đến 1.000.000.000. */
+  price: number
   status: CourseStatus
 }
 
 /**
- * Form multipart của bài học. Tạo (`POST /courses/{courseId}/lessons`): bắt buộc tài liệu; video tuỳ chọn
- * (file, link, cả hai hoặc không). Sửa (`PUT .../lessons/{lessonId}`): file không gửi thì giữ file cũ.
+ * Form multipart của bài học. Tạo (`POST /courses/{courseId}/lessons`): bắt buộc tài liệu; video là link YouTube
+ * tuỳ chọn. Sửa (`PUT .../lessons/{lessonId}`): không gửi tài liệu thì giữ tài liệu cũ.
  */
 export interface LessonPayload {
   title: string
@@ -53,10 +61,9 @@ export interface LessonPayload {
   /** ≥ 1, không trùng với bài khác trong khoá (bài đang sửa giữ số của mình được). */
   sortOrder: number
   documentFile?: File
-  videoFile?: File
-  /** Link video ở hệ thống khác (http/https). Khi sửa: rỗng = xoá link → luôn gửi giá trị hiện tại. */
+  /** Link YouTube. Khi sửa: rỗng = xoá link → luôn gửi giá trị hiện tại. */
   videoUrl?: string
-  /** Chỉ khi sửa: gỡ video đã upload (bỏ qua nếu có `videoFile` mới). */
+  /** Chỉ khi sửa: gỡ file video upload từ trước khi chuyển sang chỉ dùng YouTube. */
   removeVideo?: boolean
 }
 
@@ -108,10 +115,65 @@ export interface Enrollment {
   username: string
   /** Họ + tên học viên, backend ghép sẵn. */
   fullName: string
+  /** Doanh nghiệp của học viên (doanh nghiệp ghi danh hộ); thiếu = học viên tự do. */
+  businessName?: string
   status: EnrollmentStatus
+  /** Số tiền học viên phải chuyển (VND): giá khoá lúc gửi yêu cầu, đổi giá khoá sau đó không ảnh hưởng. */
+  price: number
   /** Ghi danh lại sau khi huỷ thì tính lại từ lúc đó. */
   enrolledAt: string
+  /** Lúc admin duyệt vào học; `null` khi đang chờ duyệt hoặc đã huỷ. Doanh thu tính theo ngày này. */
+  approvedAt: string | null
   completedAt: string | null
+}
+
+/** Một kỳ của `GET /enrollments/revenue`: từ `from` (`YYYY-MM-DD`) đến hôm nay. */
+export interface RevenuePeriod {
+  from: string
+  /** Tổng học phí (VND) của các lượt đã duyệt (đang học / hoàn thành). */
+  amount: number
+  enrollments: number
+}
+
+/** Tuần tính từ thứ Hai. */
+export interface RevenueSummary {
+  week: RevenuePeriod
+  month: RevenuePeriod
+  year: RevenuePeriod
+}
+
+/** Doanh thu một khoá trong tháng. */
+export interface CourseRevenue {
+  courseId: number
+  courseName: string
+  amount: number
+  enrollments: number
+}
+
+/** `GET /enrollments/revenue/monthly`: chỉ lượt ENROLLED / COMPLETED, theo ngày duyệt. */
+export interface MonthlyRevenue {
+  /** Ngày đầu tháng, `2026-10-01`. */
+  from: string
+  /** Ngày cuối tháng. */
+  to: string
+  /** Tổng cả tháng, không theo từ khoá. */
+  amount: number
+  enrollments: number
+  /** Cả tháng, khoá thu nhiều nhất trước. */
+  courses: CourseRevenue[]
+  /** Tổng các khoản khớp từ khoá (bằng `amount` khi không lọc). */
+  matchedAmount: number
+  /** Khoản thu khớp từ khoá, duyệt gần nhất trước. */
+  items: PageResponse<Enrollment>
+}
+
+export interface MonthlyRevenueParams {
+  /** `yyyy-MM`; bỏ trống là tháng hiện tại. */
+  month?: string
+  /** Khớp username, họ tên, SĐT học viên hoặc tên khoá. */
+  keyword?: string
+  page?: number
+  size?: number
 }
 
 export interface EnrollmentSearchParams {
@@ -135,12 +197,14 @@ export interface Certificate {
   enrollmentId: number
   courseId: number
   courseName: string
+  /** Học viên sở hữu chứng chỉ. */
+  userId: number
   fullName: string
   /** `YYYY-MM-DD`, có thể thiếu nếu lúc cấp chưa có. */
   dateOfBirth: string | null
   cccd: string | null
   issuedAt: string
-  /** PDF — chỉ chủ chứng chỉ và admin tải được. */
+  /** PDF — chủ chứng chỉ, người quản lý doanh nghiệp của họ và admin tải được. */
   fileUrl: string
 }
 

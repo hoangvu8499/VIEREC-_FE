@@ -1,0 +1,33 @@
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow);
+}
+
+.pageTitle {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.pageDescription {
+  margin-top: 4px;
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .pageHeader {
+    padding: 24px;
+  }
+
+  .pageTitle {
+    font-size: 26px;
+  }
+}

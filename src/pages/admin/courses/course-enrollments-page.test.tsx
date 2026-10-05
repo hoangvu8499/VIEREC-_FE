@@ -38,7 +38,7 @@ describe('CourseEnrollmentsPage', () => {
     await user.click(await screen.findByRole('button', { name: 'Duyệt Nguyễn Văn A vào học' }))
     const dialog = screen.getByRole('alertdialog', { name: 'Duyệt học viên vào học?' })
     expect(
-      within(dialog).getByText(transferContent(PENDING.username, PENDING.courseId)),
+      within(dialog).getByText(transferContent(PENDING.courseId, PENDING.userId)),
     ).toBeInTheDocument()
     expect(await within(dialog).findByText('FT26269123456', { exact: false })).toBeInTheDocument()
     expect(search).toHaveBeenCalledWith(

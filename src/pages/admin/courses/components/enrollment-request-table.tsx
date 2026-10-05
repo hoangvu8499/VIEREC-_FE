@@ -7,6 +7,7 @@ import { adminCoursePath } from '@/constants/routes'
 import type { EnrollmentAction } from '@/pages/admin/courses/use-course-enrollments'
 import type { Enrollment } from '@/types/course'
 import { cn } from '@/utils/cn'
+import { formatVnd } from '@/utils/format-currency'
 import { formatDateTime } from '@/utils/format-date-time'
 
 import styles from './course-list.module.css'
@@ -35,6 +36,9 @@ export function EnrollmentRequestTable({
             <th scope="col">Học viên</th>
             <th scope="col">Khoá học</th>
             <th scope="col">Gửi yêu cầu</th>
+            <th scope="col" className={styles.numberCell}>
+              Số tiền
+            </th>
             <th scope="col">Nội dung chuyển khoản</th>
             <th scope="col" className={styles.actionsHead}>
               Thao tác
@@ -47,6 +51,9 @@ export function EnrollmentRequestTable({
               <th scope="row" className={styles.courseCell}>
                 <span className={styles.courseName}>{enrollment.fullName}</span>
                 <span className={styles.subtle}>@{enrollment.username}</span>
+                {enrollment.businessName && (
+                  <span className={styles.subtle}>Doanh nghiệp: {enrollment.businessName}</span>
+                )}
               </th>
               <td data-label="Khoá học">
                 <Link
@@ -59,9 +66,12 @@ export function EnrollmentRequestTable({
               <td data-label="Gửi yêu cầu" className={styles.subtle}>
                 {formatDateTime(enrollment.enrolledAt)}
               </td>
+              <td data-label="Số tiền" className={styles.numberCell}>
+                {formatVnd(enrollment.price)}
+              </td>
               <td data-label="Nội dung CK">
                 <code className={styles.transfer}>
-                  {transferContent(enrollment.username, enrollment.courseId)}
+                  {transferContent(enrollment.courseId, enrollment.userId)}
                 </code>
               </td>
               <td className={styles.actionsCell}>

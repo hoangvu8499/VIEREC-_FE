@@ -1,0 +1,20 @@
+.form {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (min-width: 768px) {
+  .form {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    padding: 16px 20px;
+  }
+}
