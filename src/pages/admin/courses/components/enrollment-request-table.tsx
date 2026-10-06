@@ -9,6 +9,7 @@ import type { Enrollment } from '@/types/course'
 import { cn } from '@/utils/cn'
 import { formatVnd } from '@/utils/format-currency'
 import { formatDateTime } from '@/utils/format-date-time'
+import { learnerOrganization } from '@/utils/learner-organization'
 
 import styles from './course-list.module.css'
 
@@ -51,9 +52,9 @@ export function EnrollmentRequestTable({
               <th scope="row" className={styles.courseCell}>
                 <span className={styles.courseName}>{enrollment.fullName}</span>
                 <span className={styles.subtle}>@{enrollment.username}</span>
-                {enrollment.businessName && (
-                  <span className={styles.subtle}>Doanh nghiệp: {enrollment.businessName}</span>
-                )}
+                <span className={styles.subtle}>
+                  Đơn vị: {learnerOrganization(enrollment.businessName)}
+                </span>
               </th>
               <td data-label="Khoá học">
                 <Link

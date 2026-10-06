@@ -7,6 +7,8 @@ import { RoleBadges, UserStatusBadge } from '@/pages/admin/users/components/user
 import type { User } from '@/types/user'
 import { cn } from '@/utils/cn'
 import { formatDate } from '@/utils/format-date'
+import { learnerOrganization } from '@/utils/learner-organization'
+import { isAdmin } from '@/utils/user-roles'
 import { userFullName } from '@/utils/user-full-name'
 
 import styles from './user-list.module.css'
@@ -66,6 +68,11 @@ export function UserTable({
                       @{user.username}
                       {isSelf && <span className={styles.you}> · Bạn</span>}
                     </span>
+                    {!isAdmin(user) && (
+                      <span className={styles.subtle}>
+                        Đơn vị: {learnerOrganization(user.businessName)}
+                      </span>
+                    )}
                   </span>
                 </th>
                 <td data-label="Liên hệ" className={styles.stackCell}>

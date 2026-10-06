@@ -28,6 +28,8 @@ import type { FlashState } from '@/types/navigation'
 import type { User } from '@/types/user'
 import { formatDate } from '@/utils/format-date'
 import { formatDateTime } from '@/utils/format-date-time'
+import { learnerOrganization } from '@/utils/learner-organization'
+import { isAdmin } from '@/utils/user-roles'
 import { userFullName } from '@/utils/user-full-name'
 
 import styles from './components/user-detail.module.css'
@@ -124,6 +126,12 @@ export default function UserDetailPage() {
                   <dt>Địa chỉ</dt>
                   <dd>{target.address}</dd>
                 </div>
+                {!isAdmin(target) && (
+                  <div>
+                    <dt>Đơn vị</dt>
+                    <dd>{learnerOrganization(target.businessName)}</dd>
+                  </div>
+                )}
                 <div>
                   <dt>Ngày tạo · Cập nhật</dt>
                   <dd>

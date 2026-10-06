@@ -13,6 +13,7 @@ import { ProfileForm } from '@/pages/learner/components/profile-form'
 import { useAuthStore } from '@/stores/auth-store'
 import type { User } from '@/types/user'
 import { formatDate } from '@/utils/format-date'
+import { learnerOrganization } from '@/utils/learner-organization'
 
 import styles from './profile-page.module.css'
 
@@ -154,6 +155,7 @@ export default function ProfilePage() {
         items={[
           { label: 'Tên đăng nhập', value: user.username },
           { label: 'Vai trò', value: roleLabels(user) },
+          { label: 'Đơn vị', value: learnerOrganization(user.businessName) },
           { label: 'Trạng thái', value: USER_STATUS_LABELS[user.status] },
           { label: 'Ngày tạo', value: formatDate(user.createdAt) },
         ]}

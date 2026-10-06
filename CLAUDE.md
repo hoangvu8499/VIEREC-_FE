@@ -112,7 +112,8 @@ npx vitest run <file>
   danh hộ nhiều người → lượt `PENDING`, QR tổng tiền nội dung `businessTransferContent` = `VIEREC KH<khoá> DN<doanh
 nghiệp>`, admin duyệt ở hàng chờ như thường (có tên doanh nghiệp). Theo dõi tiến độ / điểm thi / chứng chỉ dùng chung
   `components/shared/member-courses.tsx` cho admin và doanh nghiệp. Góc học viên và Góc doanh nghiệp dùng chung
-  `AccountShell` + `AccountPageHeader` (`layouts/user/`).
+  `AccountShell` + `AccountPageHeader` (`layouts/user/`). "Đơn vị" của học viên hiển thị qua `learnerOrganization()`
+  (không thuộc doanh nghiệp = "Cá nhân học tập").
 - Học viên có chứng chỉ thì không tự sửa họ tên/ngày sinh/CCCD (409 `IDENTITY_LOCKED`): khoá bằng `readOnly`, không dùng
   `disabled` (RHF bỏ giá trị field disabled khi submit).
 - Chứng chỉ: học viên `/hoc-vien/chung-chi/:code`, doanh nghiệp `/doanh-nghiep-cua-toi/chung-chi[/:code]` (chứng chỉ

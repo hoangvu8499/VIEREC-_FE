@@ -6,6 +6,7 @@ import type { EnrollmentAction } from '@/pages/admin/courses/use-course-enrollme
 import type { Enrollment } from '@/types/course'
 import { cn } from '@/utils/cn'
 import { formatDateTime } from '@/utils/format-date-time'
+import { learnerOrganization } from '@/utils/learner-organization'
 
 import styles from './course-list.module.css'
 
@@ -44,6 +45,9 @@ export function EnrollmentTable({
               <th scope="row" className={styles.courseCell}>
                 <span className={styles.courseName}>{enrollment.fullName}</span>
                 <span className={styles.subtle}>@{enrollment.username}</span>
+                <span className={styles.subtle}>
+                  Đơn vị: {learnerOrganization(enrollment.businessName)}
+                </span>
               </th>
               <td data-label="Đăng ký" className={styles.subtle}>
                 {formatDateTime(enrollment.enrolledAt)}
