@@ -89,7 +89,8 @@ export const SERVICES: Service[] = [
     id: 'emergency',
     icon: Siren,
     title: 'Báo sự cố khẩn cấp 24/7',
-    description: 'Kết nối nhanh với Trung tâm Ứng phó sự cố VIEREC khi có sự cố môi trường.',
+    description:
+      'Kết nối nhanh với Trung tâm Ứng phó sự cố khẩn cấp Việt Nam (VIEREC) khi có sự cố môi trường.',
     path: ROUTES.EMERGENCY_REPORT,
     action: 'Gửi thông tin ngay',
     urgent: true,

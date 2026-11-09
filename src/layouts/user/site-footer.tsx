@@ -1,9 +1,9 @@
-import { Globe, Mail, Phone, ShieldCheck } from 'lucide-react'
+import { Globe, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react'
 import { Link } from 'react-router'
 
 import { Container } from '@/components/common/container'
 import { FacebookIcon, LinkedinIcon, YoutubeIcon } from '@/components/icons/social-icons'
-import { CONTACT, SLOGAN } from '@/constants/contact'
+import { COMPANY, CONTACT, SLOGAN, telHref } from '@/constants/contact'
 import { ROUTES } from '@/constants/routes'
 
 import styles from './site-footer.module.css'
@@ -18,12 +18,24 @@ export function SiteFooter() {
   return (
     <footer className={styles.footer}>
       <Container className={styles.inner}>
-        <p className={styles.quote}>“An toàn là nền tảng của thành công”</p>
+        <div className={styles.company}>
+          <p className={styles.companyName}>{COMPANY.NAME}</p>
+          <p className={styles.companyIntl}>{COMPANY.INTERNATIONAL_NAME}</p>
+          <p className={styles.contact}>
+            <MapPin size={16} aria-hidden /> {COMPANY.ADDRESS}
+          </p>
+          <p>Mã số thuế: {COMPANY.TAX_CODE}</p>
+        </div>
 
         <ul className={styles.contacts}>
           <li>
-            <a className={styles.contact} href={`tel:${CONTACT.HOTLINE.replaceAll(' ', '')}`}>
+            <a className={styles.contact} href={telHref(CONTACT.HOTLINE)}>
               <Phone size={16} aria-hidden /> Hotline: {CONTACT.HOTLINE}
+            </a>
+          </li>
+          <li>
+            <a className={styles.contact} href={telHref(CONTACT.PHONE)}>
+              <Phone size={16} aria-hidden /> Điện thoại: {CONTACT.PHONE}
             </a>
           </li>
           <li>

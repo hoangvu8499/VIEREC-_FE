@@ -14,13 +14,31 @@
   padding-block: 24px;
 }
 
-.quote {
-  font-style: italic;
+.company {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.company p {
+  margin: 0;
+}
+
+.companyName {
+  font-weight: 700;
+  text-transform: uppercase;
   color: var(--color-text);
+}
+
+.companyIntl {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .contacts {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 12px 24px;
   margin: 0;

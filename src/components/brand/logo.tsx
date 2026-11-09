@@ -18,7 +18,7 @@ interface LogoProps {
 export function Logo({
   variant = 'full',
   title = 'VIEREC ACADEMY',
-  subtitle = 'AN TOÀN HÔM NAY – PHÁT TRIỂN BỀN VỮNG NGÀY MAI',
+  subtitle = 'TRUNG TÂM ỨNG PHÓ SỰ CỐ KHẨN CẤP VIỆT NAM',
   to = ROUTES.HOME,
   className,
 }: LogoProps) {

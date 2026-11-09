@@ -1,7 +1,7 @@
 import { CourseCard } from '@/components/shared/course-card'
 import { ROUTES } from '@/constants/routes'
 import { usePublishedCourses } from '@/hooks/use-published-courses'
-import { HomeSection } from '@/pages/home/components/home-section'
+import { PageSection } from '@/components/shared/page-section'
 
 import styles from './latest-courses.module.css'
 
@@ -16,7 +16,7 @@ export function LatestCourses() {
   if (courses.isError || (courses.isSuccess && items.length === 0)) return null
 
   return (
-    <HomeSection
+    <PageSection
       id="latest-courses-title"
       eyebrow="Khoá học mới"
       title="Bắt đầu hành trình an toàn của bạn"
@@ -36,6 +36,6 @@ export function LatestCourses() {
           ))}
         </ul>
       )}
-    </HomeSection>
+    </PageSection>
   )
 }

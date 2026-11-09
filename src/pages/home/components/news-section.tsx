@@ -1,5 +1,5 @@
 import { ROUTES } from '@/constants/routes'
-import { HomeSection } from '@/pages/home/components/home-section'
+import { PageSection } from '@/components/shared/page-section'
 import { NewsCard } from '@/pages/home/components/news-card'
 import type { NewsItem } from '@/types/content'
 
@@ -7,7 +7,7 @@ import styles from './news-section.module.css'
 
 export function NewsSection({ news }: { news: NewsItem[] }) {
   return (
-    <HomeSection
+    <PageSection
       id="news-title"
       title="Tin tức & Sự kiện"
       viewAll={{ to: ROUTES.NEWS, label: 'Xem tất cả' }}
@@ -20,6 +20,6 @@ export function NewsSection({ news }: { news: NewsItem[] }) {
           </li>
         ))}
       </ul>
-    </HomeSection>
+    </PageSection>
   )
 }

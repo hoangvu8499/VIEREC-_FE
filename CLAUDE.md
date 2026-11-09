@@ -125,9 +125,12 @@ nghiệp>`, admin duyệt ở hàng chờ như thường (có tên doanh nghiệ
   (vị trí của tôi), state nằm trên URL. Bản đồ Leaflet nạp lười (`lazy`), test thì `vi.mock` component bản đồ.
   Trang admin "Điểm hỗ trợ sự cố" chưa có API quản lý → vẫn `AdminComingSoon`; dữ liệu nhập bằng SQL.
 - Trang chủ đang dùng dữ liệu tĩnh (`home-data.ts`). Khi có API thì giữ nguyên kiểu trong `types/content.ts`.
+- Thông tin công ty (`COMPANY`, `CONTACT`, `SLOGAN`, `MOTTO` trong `constants/contact.ts`) và trang "Về VIEREC"
+  (`about-data.ts`) lấy từ Hồ sơ năng lực trong `../document`. Không tự thêm số liệu/thông tin không có trong tài liệu.
 - Thiếu tài liệu API thì đọc `modules/*/controller`, `ErrorCode.java`, `*ApiTest.java` bên BE.
   Thứ tự `errors` trong response lỗi không cố định.
-- Ảnh tĩnh dùng WebP đã nén, đúng cỡ hiển thị (`logo-mark.webp` cắt sẵn biểu tượng từ logo gốc); có SVG gốc thì thay.
+- Ảnh tĩnh dùng WebP đã nén, đúng cỡ hiển thị (`logo-mark.webp`, favicon cắt từ logo gốc; ảnh `about/`, `team/` cắt từ trang PDF hồ sơ năng lực, đều trong
+  `../document`); có SVG gốc thì thay.
 
 ## Test
 

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Logo } from '@/components/brand/logo'
 import { Alert } from '@/components/common/alert'
 import { Container } from '@/components/common/container'
+import { SLOGAN } from '@/constants/contact'
 import { useDocumentTitle } from '@/hooks/use-document-title'
 import { RegisterForm } from '@/pages/register/components/register-form'
 import { RegisterSuccess } from '@/pages/register/components/register-success'
@@ -28,7 +29,7 @@ export default function RegisterPage() {
         <aside className={styles.aside}>
           <Logo variant="compact" />
           <p className={styles.asideTitle}>Trở thành học viên VIEREC Academy</p>
-          <p className={styles.asideText}>An toàn hôm nay – Phát triển bền vững ngày mai.</p>
+          <p className={styles.asideText}>{SLOGAN}.</p>
           <ul className={styles.benefits}>
             {BENEFITS.map((benefit) => (
               <li key={benefit}>

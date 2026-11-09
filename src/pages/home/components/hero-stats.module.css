@@ -7,17 +7,24 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-border);
+  box-shadow: var(--shadow-sm);
   list-style: none;
   gap: 1px;
 }
 
 .stats li {
+  display: flex;
+  justify-content: center;
   padding: 18px 16px;
-  background: var(--color-surface);
+  background: var(--color-white);
 }
 
 @media (min-width: 1024px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .stats li {
-    padding: 28px 24px;
+    padding: 24px;
   }
 }

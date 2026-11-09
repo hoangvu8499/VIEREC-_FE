@@ -1,5 +1,6 @@
 import logoMark from '@/assets/images/logo-mark.webp'
 import { QrCode } from '@/components/common/qr-code'
+import { COMPANY } from '@/constants/contact'
 import { certificateVerifyPath } from '@/constants/routes'
 import type { Certificate } from '@/types/course'
 import { formatDate } from '@/utils/format-date'
@@ -19,7 +20,7 @@ export function CertificateSheet({ certificate }: { certificate: Certificate }) 
         <img src={logoMark} alt="" width={56} height={56} />
         <div>
           <p className={styles.brandName}>VIEREC ACADEMY</p>
-          <p className={styles.brandSlogan}>An toàn hôm nay – Phát triển bền vững ngày mai</p>
+          <p className={styles.brandSlogan}>{COMPANY.NAME}</p>
         </div>
       </header>
 

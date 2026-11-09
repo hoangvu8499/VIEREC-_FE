@@ -5,9 +5,9 @@ import { Link } from 'react-router'
 import { Container } from '@/components/common/container'
 import { cn } from '@/utils/cn'
 
-import styles from './home-section.module.css'
+import styles from './page-section.module.css'
 
-interface HomeSectionProps {
+interface PageSectionProps {
   /** Id của tiêu đề, section dùng `aria-labelledby`. */
   id: string
   eyebrow?: string
@@ -19,8 +19,8 @@ interface HomeSectionProps {
   children: ReactNode
 }
 
-/** Khung chung của các khối trang chủ: cùng khoảng cách, cùng kiểu tiêu đề. */
-export function HomeSection({
+/** Khung chung của các khối nội dung (trang chủ, Về VIEREC): cùng khoảng cách, cùng kiểu tiêu đề. */
+export function PageSection({
   id,
   eyebrow,
   title,
@@ -28,7 +28,7 @@ export function HomeSection({
   viewAll,
   white,
   children,
-}: HomeSectionProps) {
+}: PageSectionProps) {
   return (
     <section className={cn(styles.section, white && styles.white)} aria-labelledby={id}>
       <Container>

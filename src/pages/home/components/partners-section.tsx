@@ -1,12 +1,12 @@
 import { ROUTES } from '@/constants/routes'
-import { HomeSection } from '@/pages/home/components/home-section'
+import { PageSection } from '@/components/shared/page-section'
 import type { Partner } from '@/types/content'
 
 import styles from './partners-section.module.css'
 
 export function PartnersSection({ partners }: { partners: Partner[] }) {
   return (
-    <HomeSection
+    <PageSection
       id="partners-title"
       title="Đối tác & Khách hàng"
       viewAll={{ to: ROUTES.PARTNERS, label: 'Xem tất cả' }}
@@ -32,6 +32,6 @@ export function PartnersSection({ partners }: { partners: Partner[] }) {
           )
         })}
       </ul>
-    </HomeSection>
+    </PageSection>
   )
 }
