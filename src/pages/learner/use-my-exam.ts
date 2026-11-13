@@ -67,6 +67,9 @@ export function startExamErrorMessage(error: ApiError): string {
   if (error.code === API_ERROR_CODES.EXAM_HAS_NO_QUESTIONS) {
     return `Bài thi chưa có câu hỏi. Vui lòng gọi ${CONTACT.HOTLINE} để được hỗ trợ.`
   }
+  if (error.code === API_ERROR_CODES.EXAM_NOT_ENOUGH_QUESTIONS) {
+    return `Bài thi chưa đủ câu hỏi để tạo đề. Vui lòng gọi ${CONTACT.HOTLINE} để được hỗ trợ.`
+  }
   if (error.code === API_ERROR_CODES.EXAM_NOT_ALLOWED) {
     return 'Bạn chưa được duyệt vào khoá học này nên chưa thể thi.'
   }

@@ -5,15 +5,18 @@ import {
   CircleCheck,
   Download,
   ExternalLink,
+  Eye,
   FileText,
   GraduationCap,
   Hourglass,
   Lock,
 } from 'lucide-react'
+import { lazy, Suspense, useState } from 'react'
 import { useSearchParams } from 'react-router'
 
 import { Button } from '@/components/common/button'
 import { ButtonLink } from '@/components/common/button-link'
+import { Dialog } from '@/components/common/dialog'
 import { EmptyState } from '@/components/common/empty-state'
 import { API_ERROR_CODES } from '@/constants/api-error-codes'
 import { EXAM_WATCH_RATIO } from '@/constants/course'
@@ -30,7 +33,7 @@ import {
   type ProgressSummary,
 } from '@/pages/learner/use-watch-progress'
 import { useAuthStore } from '@/stores/auth-store'
-import type { CourseDetail, Lesson } from '@/types/course'
+import type { CourseDetail, Lesson, LessonFile } from '@/types/course'
 import { apiErrorMessage } from '@/utils/api-error-message'
 import { apiFileUrl } from '@/utils/api-file-url'
 import { cn } from '@/utils/cn'
@@ -39,6 +42,16 @@ import { videoHost } from '@/utils/video-host'
 import { youtubeVideoId } from '@/utils/youtube-video-id'
 
 import styles from './learn-page.module.css'
+
+// pdf.js nặng: chỉ tải khi học viên mở xem tài liệu.
+const PdfViewer = lazy(() =>
+  import('@/components/shared/pdf-viewer').then((module) => ({ default: module.PdfViewer })),
+)
+
+/** Tài liệu xem được ngay trên trang; loại khác (Word, PowerPoint...) chỉ tải về. */
+function isViewable(file: LessonFile): boolean {
+  return file.contentType === 'application/pdf'
+}
 
 /** Bài đang xem trên URL: `?bai=<lessonId>`. */
 const LESSON_PARAM = 'bai'
@@ -331,6 +344,7 @@ function LessonVideos({
 }
 
 function LessonDocuments({ lesson }: { lesson: Lesson }) {
+  const [viewing, setViewing] = useState<LessonFile>()
   const documents = lesson.files.filter((file) => file.fileType === 'DOCUMENT')
   if (documents.length === 0) return null
 
@@ -341,17 +355,52 @@ function LessonDocuments({ lesson }: { lesson: Lesson }) {
       </h3>
       <ul className={styles.documentList}>
         {documents.map((file) => (
-          <li key={file.fileId}>
-            <a className={styles.document} href={apiFileUrl(file.url)} download={file.originalName}>
-              <FileText size={20} aria-hidden />
-              <span className={styles.documentName}>{file.originalName}</span>
-              <span className={styles.documentSize}>{formatFileSize(file.sizeBytes)}</span>
+          <li key={file.fileId} className={styles.document}>
+            <FileText size={20} aria-hidden />
+            <span className={styles.documentName}>{file.originalName}</span>
+            <span className={styles.documentSize}>{formatFileSize(file.sizeBytes)}</span>
+            {isViewable(file) && (
+              <button
+                type="button"
+                className={styles.documentAction}
+                aria-label={`Xem ${file.originalName}`}
+                title="Xem trực tiếp"
+                onClick={() => setViewing(file)}
+              >
+                <Eye size={18} aria-hidden />
+              </button>
+            )}
+            <a
+              className={styles.documentAction}
+              href={apiFileUrl(file.url)}
+              download={file.originalName}
+              aria-label={`Tải ${file.originalName}`}
+              title="Tải về"
+            >
               <Download size={18} aria-hidden />
-              <span className="sr-only"> (tải về)</span>
             </a>
           </li>
         ))}
       </ul>
+
+      <Dialog
+        open={viewing !== undefined}
+        size="wide"
+        title={viewing?.originalName ?? ''}
+        onClose={() => setViewing(undefined)}
+      >
+        {viewing && (
+          <Suspense
+            fallback={
+              <p className={styles.viewerLoading} aria-busy>
+                Đang mở tài liệu…
+              </p>
+            }
+          >
+            <PdfViewer key={viewing.fileId} url={apiFileUrl(viewing.url)} />
+          </Suspense>
+        )}
+      </Dialog>
     </section>
   )
 }

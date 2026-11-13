@@ -3,6 +3,7 @@ import { type ReactNode, useEffect, useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
 import { IconButton } from '@/components/common/icon-button'
+import { cn } from '@/utils/cn'
 import { trapFocus } from '@/utils/trap-focus'
 
 import styles from './dialog.module.css'
@@ -13,6 +14,8 @@ interface DialogProps {
   description?: ReactNode
   /** Đang xử lý: không đóng được bằng Esc / nút X. */
   busy?: boolean
+  /** `wide`: rộng gần hết màn hình (vd. xem tài liệu). */
+  size?: 'md' | 'wide'
   onClose: () => void
   /** Nội dung (thường là form kèm nút ở cuối). Phần này cuộn khi dài hơn màn hình. */
   children: ReactNode
@@ -22,7 +25,15 @@ interface DialogProps {
  * Hộp thoại chứa form (rộng hơn `ConfirmDialog`, căn trái). Mở thì focus ô nhập đầu tiên, Esc để đóng,
  * Tab chỉ chạy trong hộp thoại, đóng xong trả focus về chỗ cũ.
  */
-export function Dialog({ open, title, description, busy = false, onClose, children }: DialogProps) {
+export function Dialog({
+  open,
+  title,
+  description,
+  busy = false,
+  size = 'md',
+  onClose,
+  children,
+}: DialogProps) {
   const titleId = useId()
   const descriptionId = useId()
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -57,7 +68,7 @@ export function Dialog({ open, title, description, busy = false, onClose, childr
       <dialog
         ref={dialogRef}
         open
-        className={styles.dialog}
+        className={cn(styles.dialog, size === 'wide' && styles.wide)}
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}

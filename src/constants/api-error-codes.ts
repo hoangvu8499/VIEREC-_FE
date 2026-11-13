@@ -47,6 +47,12 @@ export const API_ERROR_CODES = {
   ADDRESS_NOT_FOUND: 'VRC-404-601',
   /** Dịch vụ đổi địa chỉ ra toạ độ (OpenStreetMap) không phản hồi. */
   GEOCODING_UNAVAILABLE: 'VRC-503-601',
+  SUPPORT_POINT_NOT_FOUND: 'VRC-404-602',
+  /** File import điểm hỗ trợ có dòng sai (không lưu điểm nào); `errors` dạng `rows[<dòng Excel>].<field>`. */
+  SUPPORT_POINT_IMPORT_INVALID_ROWS: 'VRC-400-602',
+  SUPPORT_POINT_IMPORT_UNREADABLE: 'VRC-400-603',
+  SUPPORT_POINT_IMPORT_EMPTY: 'VRC-400-604',
+  SUPPORT_POINT_IMPORT_TOO_MANY_ROWS: 'VRC-400-605',
   /** Khoá học chưa có bài thi chứng chỉ. */
   EXAM_NOT_FOUND: 'VRC-404-701',
   EXAM_QUESTION_NOT_FOUND: 'VRC-404-702',
@@ -65,6 +71,8 @@ export const API_ERROR_CODES = {
   EXAM_ALREADY_TAKEN: 'VRC-409-702',
   /** Chưa xem đủ 80% thời lượng video (server kiểm tra lúc bắt đầu thi). */
   EXAM_PROGRESS_NOT_ENOUGH: 'VRC-409-703',
+  /** Kho có ít câu hơn số câu mỗi đề: admin cần thêm câu hỏi. */
+  EXAM_NOT_ENOUGH_QUESTIONS: 'VRC-409-704',
   /** Lưu tiến độ video khi chưa được duyệt vào khoá. */
   PROGRESS_NOT_ALLOWED: 'VRC-403-201',
   BUSINESS_NOT_FOUND: 'VRC-404-801',
@@ -77,6 +85,12 @@ export const API_ERROR_CODES = {
   BUSINESS_INACTIVE: 'VRC-403-802',
   /** Ghi danh có người không phải học viên của doanh nghiệp. */
   BUSINESS_ENROLL_NOT_MEMBERS: 'VRC-400-801',
+  /** File import học viên có dòng sai (không tạo tài khoản nào); `errors` dạng `rows[<dòng Excel>].<field>`. */
+  MEMBER_IMPORT_INVALID_ROWS: 'VRC-400-802',
+  /** Không đọc được file Excel (hỏng, có mật khẩu, không phải Excel). */
+  MEMBER_IMPORT_UNREADABLE: 'VRC-400-803',
+  MEMBER_IMPORT_EMPTY: 'VRC-400-804',
+  MEMBER_IMPORT_TOO_MANY_ROWS: 'VRC-400-805',
 } as const
 
 export type ApiErrorCode = (typeof API_ERROR_CODES)[keyof typeof API_ERROR_CODES]

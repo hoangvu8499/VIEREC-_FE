@@ -89,6 +89,107 @@ describe('Góc doanh nghiệp', () => {
     expect(await screen.findByText(/Doanh nghiệp đang tạm ngừng trên hệ thống/)).toBeVisible()
   })
 
+  it('imports learners from Excel and lists the rows to fix with their Excel row numbers', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(myBusinessService, 'members').mockResolvedValue(pageOf([BUSINESS_MEMBER_FIXTURE]))
+    const importMembers = vi
+      .spyOn(myBusinessService, 'importMembers')
+      .mockRejectedValueOnce({
+        status: 400,
+        code: 'VRC-400-802',
+        message: 'Some rows of the file are invalid; no account was created',
+        fieldErrors: [
+          {
+            field: 'rows[4].cccd',
+            rejectedValue: '001099012345',
+            message: 'Already used on row 2 of the file',
+          },
+          {
+            field: 'rows[3].phoneNumber',
+            rejectedValue: '090123456',
+            message: 'Phone number must be exactly 10 digits',
+          },
+          { field: 'rows[3].address', rejectedValue: '', message: 'Address is required' },
+          {
+            field: 'rows[6].email',
+            rejectedValue: 'an@congty.vn',
+            message: 'An account already uses this value',
+          },
+          {
+            field: 'rows[7].cccd',
+            rejectedValue: '001099012399',
+            message: 'Another account already uses this CCCD as its username',
+          },
+        ],
+      })
+      .mockResolvedValue({ importedCount: 120, members: [BUSINESS_MEMBER_FIXTURE] })
+    render(BUSINESS_ROUTES.OVERVIEW, <BusinessOverviewPage />)
+
+    // Ghi chú ngoài popup: số CCCD là tên đăng nhập.
+    expect(await screen.findByText(/số CCCD làm tên đăng nhập/)).toBeVisible()
+    await user.click(await screen.findByRole('button', { name: 'Import Excel' }))
+    const dialog = screen.getByRole('dialog', { name: 'Import học viên từ Excel' })
+    expect(within(dialog).getByText(/số CCCD chính là tên đăng nhập/)).toBeVisible()
+    expect(within(dialog).getByRole('link', { name: /Tải file mẫu/ })).toHaveAttribute(
+      'href',
+      expect.stringMatching(/\/api\/v1\/my-business\/members\/import-template$/),
+    )
+
+    // Chưa chọn file, chưa nhập mật khẩu: báo ngay, không gọi API.
+    await user.click(within(dialog).getByRole('button', { name: 'Import' }))
+    expect(within(dialog).getByText('Vui lòng chọn file Excel học viên')).toBeInTheDocument()
+    expect(within(dialog).getByText('Vui lòng nhập mật khẩu')).toBeInTheDocument()
+    expect(importMembers).not.toHaveBeenCalled()
+
+    const file = new File(['xlsx'], 'hoc-vien.xlsx', {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    })
+    await user.upload(within(dialog).getByLabelText(label('File học viên')), file)
+    await user.type(within(dialog).getByLabelText(label('Mật khẩu mặc định')), 'Congty@2026')
+    await user.click(within(dialog).getByRole('button', { name: 'Import' }))
+
+    expect(importMembers).toHaveBeenCalledWith(file, 'Congty@2026')
+    expect(await within(dialog).findByText(/chưa tạo tài khoản nào/)).toBeInTheDocument()
+    const rows = within(dialog).getByRole('list', { name: 'Các dòng cần sửa' })
+    expect(
+      within(rows)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent),
+    ).toEqual([
+      'Dòng 3: Số điện thoại “090123456”: số điện thoại phải gồm đúng 10 chữ số; Địa chỉ đang để trống',
+      'Dòng 4: Số CCCD “001099012345” trùng với dòng 2 trong file',
+      'Dòng 6: Email “an@congty.vn” đã có tài khoản sử dụng',
+      'Dòng 7: Số CCCD “001099012399” đã được dùng làm tên đăng nhập của một tài khoản khác',
+    ])
+
+    await user.click(within(dialog).getByRole('button', { name: 'Import' }))
+    expect(await screen.findByText(/Đã tạo 120 tài khoản học viên/)).toBeInTheDocument()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('rejects a default password without a special character before calling the server', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(myBusinessService, 'members').mockResolvedValue(pageOf([]))
+    const importMembers = vi.spyOn(myBusinessService, 'importMembers')
+    render(BUSINESS_ROUTES.OVERVIEW, <BusinessOverviewPage />)
+
+    // Danh sách trống: nút import cũng có ở ô "chưa có học viên".
+    const buttons = await screen.findAllByRole('button', { name: 'Import Excel' })
+    await user.click(buttons[buttons.length - 1] as HTMLElement)
+    const dialog = screen.getByRole('dialog', { name: 'Import học viên từ Excel' })
+    await user.upload(
+      within(dialog).getByLabelText(label('File học viên')),
+      new File(['xlsx'], 'hoc-vien.xlsx'),
+    )
+    await user.type(within(dialog).getByLabelText(label('Mật khẩu mặc định')), 'congty2026')
+    await user.click(within(dialog).getByRole('button', { name: 'Import' }))
+
+    expect(
+      within(dialog).getByText(/ít nhất 1 ký tự đặc biệt/, { selector: 'p, span' }),
+    ).toBeVisible()
+    expect(importMembers).not.toHaveBeenCalled()
+  })
+
   it('creates a learner account and opens their progress', async () => {
     const user = userEvent.setup()
     const create = vi

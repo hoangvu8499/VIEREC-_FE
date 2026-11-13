@@ -1,7 +1,7 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { API_ERROR_CODES } from '@/constants/api-error-codes'
-import { BUSINESS_QUERY_KEYS } from '@/constants/business'
+import { BUSINESS_QUERY_KEYS, MEMBER_IMPORT_RULES } from '@/constants/business'
 import { CONTACT } from '@/constants/contact'
 import { COURSE_QUERY_KEYS, ENROLLMENT_QUERY_KEYS } from '@/constants/course'
 import { myBusinessService } from '@/services/business-service'
@@ -12,11 +12,13 @@ import type {
   BusinessEnrollResult,
   BusinessMember,
   BusinessMemberDetail,
+  BusinessMemberImportResult,
   BusinessMemberSearchParams,
 } from '@/types/business'
 import type { Certificate } from '@/types/course'
 import type { RegisterPayload } from '@/types/user'
 import { apiErrorMessage } from '@/utils/api-error-message'
+import { formatFileSize } from '@/utils/format-file-size'
 
 /** Lỗi không thử lại: tài khoản chưa gắn doanh nghiệp, doanh nghiệp ngừng, học viên không thuộc doanh nghiệp. */
 const FINAL_ERRORS: readonly string[] = [
@@ -81,6 +83,17 @@ export function useCreateMember() {
   })
 }
 
+export function useImportMembers() {
+  const queryClient = useQueryClient()
+  return useMutation<BusinessMemberImportResult, ApiError, { file: File; defaultPassword: string }>(
+    {
+      mutationFn: ({ file, defaultPassword }) =>
+        myBusinessService.importMembers(file, defaultPassword),
+      onSuccess: () => void queryClient.invalidateQueries({ queryKey: BUSINESS_QUERY_KEYS.all }),
+    },
+  )
+}
+
 export function useBusinessEnroll() {
   const queryClient = useQueryClient()
   return useMutation<BusinessEnrollResult, ApiError, BusinessEnrollPayload>({
@@ -116,6 +129,29 @@ export function createMemberErrorMessage(error: ApiError, fieldMessages: string[
     return 'Một số thông tin chưa hợp lệ. Vui lòng kiểm tra lại các ô được đánh dấu bên dưới.'
   }
   return businessErrorMessage(error, 'Chưa tạo được tài khoản. Vui lòng thử lại.')
+}
+
+/** Lỗi import không gắn với dòng nào (dòng sai hiện riêng bằng `memberImportRowErrors`). */
+export function memberImportErrorMessage(error: ApiError): string {
+  switch (error.code) {
+    case API_ERROR_CODES.MEMBER_IMPORT_INVALID_ROWS:
+      return 'File có dòng chưa hợp lệ nên chưa tạo tài khoản nào. Sửa các dòng dưới đây rồi import lại.'
+    case API_ERROR_CODES.MEMBER_IMPORT_UNREADABLE:
+      return 'Không đọc được file. Hãy lưu lại đúng định dạng Excel (.xlsx), không đặt mật khẩu, rồi thử lại.'
+    case API_ERROR_CODES.MEMBER_IMPORT_EMPTY:
+      return 'File chưa có học viên nào. Nhập học viên từ dòng 2 của sheet “Học viên”.'
+    case API_ERROR_CODES.MEMBER_IMPORT_TOO_MANY_ROWS:
+      return `Mỗi file tối đa ${MEMBER_IMPORT_RULES.maxRows} học viên. Hãy chia thành nhiều file.`
+    case API_ERROR_CODES.FILE_TYPE_NOT_ALLOWED:
+      return 'Chỉ nhận file Excel .xlsx hoặc .xls.'
+    case API_ERROR_CODES.FILE_TOO_LARGE:
+      return `File tối đa ${formatFileSize(MEMBER_IMPORT_RULES.maxBytes)}.`
+    default:
+      if (error.fieldErrors?.some(({ field }) => field === 'defaultPassword')) {
+        return 'Mật khẩu mặc định chưa hợp lệ: tối thiểu 8 ký tự và có ít nhất 1 ký tự đặc biệt.'
+      }
+      return businessErrorMessage(error, 'Không import được file. Vui lòng thử lại.')
+  }
 }
 
 export function enrollErrorMessage(error: ApiError): string {

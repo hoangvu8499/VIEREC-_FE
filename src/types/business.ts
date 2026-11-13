@@ -114,6 +114,20 @@ export interface BusinessMemberDetail {
   courses: MemberCourse[]
 }
 
+/** Kết quả `POST /my-business/members/import`: mọi dòng đều đã tạo tài khoản (sai một dòng thì không tạo gì). */
+export interface BusinessMemberImportResult {
+  importedCount: number
+  /** Tài khoản vừa tạo, theo thứ tự dòng trong file. */
+  members: BusinessMember[]
+}
+
+/** Một dòng sai trong file Excel import học viên (đã dịch sang tiếng Việt). */
+export interface MemberImportRowError {
+  /** Số dòng trong Excel (dòng 1 là tiêu đề). */
+  row: number
+  message: string
+}
+
 /** Body `POST /my-business/enrollments`. */
 export interface BusinessEnrollPayload {
   courseId: number

@@ -21,7 +21,10 @@ export interface Exam {
   durationMinutes: number
   /** Điểm đạt, thang 10. */
   passScore: number
+  /** Số câu trong kho. */
   questionCount: number
+  /** Số câu mỗi đề, bốc ngẫu nhiên từ kho cho từng học viên. `null`: cả kho (bài thi tạo trước đây). */
+  questionsPerAttempt: number | null
   questions: ExamQuestion[]
   createdAt: string
   updatedAt: string
@@ -32,6 +35,7 @@ export interface ExamPayload {
   title: string
   durationMinutes: number
   passScore: number
+  questionsPerAttempt: number
 }
 
 export type ExamQuestionPayload = Omit<ExamQuestion, 'id' | 'sortOrder'>
@@ -60,6 +64,7 @@ export interface ExamAttemptInProgress extends ExamAttemptBase {
   status: 'IN_PROGRESS'
   /** Số giây còn lại do server tính lúc trả về — đếm ngược từ đây, không so với giờ máy. */
   remainingSeconds: number
+  /** Đề của học viên: câu bốc ngẫu nhiên từ kho, theo thứ tự đã bốc. */
   questions: ExamPaperQuestion[]
 }
 
@@ -82,6 +87,7 @@ export interface MyExam {
   title: string
   durationMinutes: number
   passScore: number
+  /** Số câu trong đề của học viên. */
   questionCount: number
   /** `null`: chưa bắt đầu thi. */
   attempt: ExamAttempt | null

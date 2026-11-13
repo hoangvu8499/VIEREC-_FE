@@ -14,6 +14,11 @@ import type { EnrollmentStatus } from '@/types/course'
 import type { MyExam } from '@/types/exam'
 import { storage } from '@/utils/storage'
 
+// pdf.js không chạy được trong jsdom; trình xem PDF có test riêng.
+vi.mock('@/components/shared/pdf-viewer', () => ({
+  PdfViewer: ({ url }: { url: string }) => <p>PDF: {url}</p>,
+}))
+
 const PROGRESS_KEY = `${STORAGE_KEYS.WATCH_PROGRESS}.${USER_FIXTURE.id}.${COURSE_DETAIL_FIXTURE.id}`
 /** Video upload của bài 1 (bài 2 chỉ có link YouTube không hợp lệ → mở ở trang ngoài). */
 const UPLOADED_VIDEO_KEY = 'lesson-11:file-2'
@@ -82,7 +87,7 @@ describe('LearnPage (vào học)', () => {
     renderPage('ENROLLED')
 
     const lesson = await screen.findByRole('article', { name: 'Nhận biết nguy cơ cháy nổ' })
-    expect(within(lesson).getByRole('link', { name: /bai-1\.pdf/ })).toHaveAttribute(
+    expect(within(lesson).getByRole('link', { name: 'Tải bai-1.pdf' })).toHaveAttribute(
       'download',
       'bai-1.pdf',
     )
@@ -96,6 +101,18 @@ describe('LearnPage (vào học)', () => {
       'href',
       'https://www.youtube.com/watch?v=abc123',
     )
+  })
+
+  it('opens a PDF document right on the page', async () => {
+    const user = userEvent.setup()
+    renderPage('ENROLLED')
+
+    await user.click(await screen.findByRole('button', { name: 'Xem bai-1.pdf' }))
+    const viewer = screen.getByRole('dialog', { name: 'bai-1.pdf' })
+    expect(await within(viewer).findByText(/^PDF: .*\/api\/v1\/files\/1$/)).toBeInTheDocument()
+
+    await user.click(within(viewer).getByRole('button', { name: 'Đóng' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('locks the exam until 80% of the video time is watched', async () => {

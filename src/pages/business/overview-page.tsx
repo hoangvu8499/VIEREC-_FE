@@ -1,4 +1,12 @@
-import { Building2, CalendarPlus, RotateCw, SearchX, UserPlus, Users } from 'lucide-react'
+import {
+  Building2,
+  CalendarPlus,
+  FileSpreadsheet,
+  RotateCw,
+  SearchX,
+  UserPlus,
+  Users,
+} from 'lucide-react'
 import { useState } from 'react'
 import { useLocation } from 'react-router'
 
@@ -13,6 +21,7 @@ import { BUSINESS_PAGE_SIZE } from '@/constants/business'
 import { BUSINESS_ROUTES, businessMemberPath } from '@/constants/routes'
 import { useDocumentTitle } from '@/hooks/use-document-title'
 import { AccountPageHeader } from '@/layouts/user/account-page-header'
+import { MemberImportDialog } from '@/pages/business/member-import-dialog'
 import { useListParams } from '@/pages/business/use-list-params'
 import { businessErrorMessage, useMyBusiness, useMyMembers } from '@/pages/business/use-my-business'
 import type { FlashState } from '@/types/navigation'
@@ -25,6 +34,8 @@ export default function BusinessOverviewPage() {
   useDocumentTitle('Góc doanh nghiệp')
   const location = useLocation()
   const [flash] = useState((location.state as FlashState | null)?.flash)
+  const [importOpen, setImportOpen] = useState(false)
+  const [imported, setImported] = useState<string>()
   const business = useMyBusiness()
   const { keyword, page, update } = useListParams()
   const members = useMyMembers({ keyword, page, size: BUSINESS_PAGE_SIZE })
@@ -59,6 +70,9 @@ export default function BusinessOverviewPage() {
             <ButtonLink to={BUSINESS_ROUTES.MEMBER_CREATE} variant="outline">
               <UserPlus size={18} aria-hidden /> Thêm học viên
             </ButtonLink>
+            <Button variant="outline" onClick={() => setImportOpen(true)}>
+              <FileSpreadsheet size={18} aria-hidden /> Import Excel
+            </Button>
             <ButtonLink to={BUSINESS_ROUTES.ENROLL} variant="accent">
               <CalendarPlus size={18} aria-hidden /> Đăng ký khoá học
             </ButtonLink>
@@ -66,7 +80,27 @@ export default function BusinessOverviewPage() {
         }
       />
 
-      {flash && <Alert variant="success">{flash}</Alert>}
+      <MemberImportDialog
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={(result) => {
+          setImported(
+            `Đã tạo ${numberFormatter.format(result.importedCount)} tài khoản học viên. ` +
+              'Học viên đăng nhập bằng số CCCD và mật khẩu mặc định, rồi tự đổi mật khẩu.',
+          )
+          // Học viên mới nhất hiện đầu danh sách.
+          update({ keyword: undefined, page: 0 })
+        }}
+      />
+
+      {imported && <Alert variant="success">{imported}</Alert>}
+      {!imported && flash && <Alert variant="success">{flash}</Alert>}
+
+      <Alert variant="info" title="Import học viên bằng Excel">
+        Học viên tạo bằng file Excel dùng <strong>số CCCD làm tên đăng nhập</strong> và mật khẩu mặc
+        định do doanh nghiệp đặt khi import. Hãy báo cho học viên đăng nhập bằng số CCCD của mình,
+        rồi tự đổi mật khẩu.
+      </Alert>
 
       {business.data && (
         <dl className={styles.stats}>
@@ -137,11 +171,16 @@ export default function BusinessOverviewPage() {
           <EmptyState
             icon={Users}
             title="Doanh nghiệp chưa có học viên"
-            description="Tạo tài khoản cho từng nhân viên, sau đó đăng ký khoá học cho họ."
+            description="Tạo tài khoản cho từng nhân viên hoặc import cả danh sách từ Excel, sau đó đăng ký khoá học cho họ."
             action={
-              <ButtonLink to={BUSINESS_ROUTES.MEMBER_CREATE} variant="accent">
-                <UserPlus size={18} aria-hidden /> Thêm học viên
-              </ButtonLink>
+              <div className={styles.headerActions}>
+                <ButtonLink to={BUSINESS_ROUTES.MEMBER_CREATE} variant="accent">
+                  <UserPlus size={18} aria-hidden /> Thêm học viên
+                </ButtonLink>
+                <Button variant="outline" onClick={() => setImportOpen(true)}>
+                  <FileSpreadsheet size={18} aria-hidden /> Import Excel
+                </Button>
+              </div>
             }
           />
         )}

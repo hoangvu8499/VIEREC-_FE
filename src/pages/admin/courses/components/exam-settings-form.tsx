@@ -21,7 +21,7 @@ import type { Exam } from '@/types/exam'
 import styles from './exam.module.css'
 
 /** Thứ tự ô trên form — lỗi server đầu tiên theo thứ tự này được focus. */
-const FIELD_ORDER: ExamField[] = ['title', 'durationMinutes', 'passScore']
+const FIELD_ORDER: ExamField[] = ['title', 'durationMinutes', 'passScore', 'questionsPerAttempt']
 
 interface ExamSettingsFormProps {
   courseId: number
@@ -35,7 +35,7 @@ interface ExamSettingsFormProps {
   onBusyChange?: (busy: boolean) => void
 }
 
-/** Tên bài thi, thời gian làm bài, điểm đạt (thang 10). */
+/** Tên bài thi, thời gian làm bài, điểm đạt (thang 10), số câu mỗi đề. */
 export function ExamSettingsForm({
   courseId,
   courseName,
@@ -116,6 +116,15 @@ export function ExamSettingsForm({
             hint="Vd. 5 hoặc 7,5"
             error={errors.passScore?.message}
             {...register('passScore')}
+          />
+          <TextField
+            label="Số câu mỗi đề"
+            required
+            inputMode="numeric"
+            maxLength={String(EXAM_RULES.questionsPerAttemptMax).length}
+            hint="Mỗi học viên nhận số câu này, bốc ngẫu nhiên từ kho câu hỏi"
+            error={errors.questionsPerAttempt?.message}
+            {...register('questionsPerAttempt')}
           />
         </div>
       </fieldset>

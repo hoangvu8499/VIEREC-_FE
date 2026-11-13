@@ -43,3 +43,13 @@ export const BUSINESS_STATUS_HINTS: Record<BusinessStatus, string> = {
 }
 
 export const BUSINESS_PAGE_SIZE = 10
+
+/** Giới hạn khớp `BusinessMemberWorkbook` của backend. */
+export const MEMBER_IMPORT_RULES = {
+  maxRows: 500,
+  maxBytes: 5 * 1024 * 1024,
+  extensions: ['xlsx', 'xls'],
+} as const
+
+/** File Excel mẫu import học viên (backend sinh, cần đăng nhập người quản lý doanh nghiệp). */
+export const MEMBER_IMPORT_TEMPLATE_PATH = '/api/v1/my-business/members/import-template'

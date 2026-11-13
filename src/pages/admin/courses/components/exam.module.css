@@ -200,6 +200,10 @@
   order: -1;
 }
 
+.summaryAlert {
+  margin-top: 14px;
+}
+
 @media (min-width: 640px) {
   .settingsRow {
     grid-template-columns: 1fr 1fr;

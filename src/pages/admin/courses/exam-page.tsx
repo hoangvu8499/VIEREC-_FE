@@ -33,7 +33,10 @@ import detailStyles from './components/course-detail.module.css'
 import styles from './components/exam.module.css'
 
 function ExamSummary({ exam, onEdit }: { exam: Exam; onEdit: () => void }) {
-  const count = exam.questionCount
+  const bank = exam.questionCount
+  /** Số câu trên đề của mỗi học viên. */
+  const count = exam.questionsPerAttempt ?? bank
+  const missing = count - bank
   return (
     <aside className={cn(detailStyles.card, styles.summary)} aria-labelledby="exam-settings-title">
       <div className={detailStyles.cardHeader}>
@@ -60,6 +63,26 @@ function ExamSummary({ exam, onEdit }: { exam: Exam; onEdit: () => void }) {
           </dd>
         </div>
         <div>
+          <dt>Số câu mỗi đề</dt>
+          <dd>
+            {exam.questionsPerAttempt === null ? (
+              <>
+                <span>Toàn bộ kho ({bank} câu)</span>
+                <span className={detailStyles.muted}>
+                  Bấm Sửa để chọn số câu bốc ngẫu nhiên cho mỗi học viên
+                </span>
+              </>
+            ) : (
+              <>
+                <span>{count} câu, bốc ngẫu nhiên từ kho</span>
+                <span className={detailStyles.muted}>
+                  Mỗi học viên nhận một đề khác nhau, thứ tự câu cũng khác nhau
+                </span>
+              </>
+            )}
+          </dd>
+        </div>
+        <div>
           <dt>Cách tính điểm</dt>
           <dd>
             {count > 0 ? (
@@ -77,6 +100,12 @@ function ExamSummary({ exam, onEdit }: { exam: Exam; onEdit: () => void }) {
           </dd>
         </div>
       </dl>
+      {missing > 0 && (
+        <Alert className={styles.summaryAlert} variant="warning" title="Kho chưa đủ câu hỏi">
+          Mỗi đề cần {count} câu nhưng kho mới có {bank} câu. Thêm ít nhất {missing} câu nữa thì học
+          viên mới bắt đầu thi được.
+        </Alert>
+      )}
     </aside>
   )
 }
@@ -177,7 +206,7 @@ function ExamContent({ course, onFlash }: ExamContentProps) {
         <section className={detailStyles.card} aria-labelledby="exam-questions-title">
           <div className={detailStyles.cardHeader}>
             <h2 id="exam-questions-title" className={detailStyles.cardTitle}>
-              Câu hỏi <span className={detailStyles.count}>{data.questionCount}</span>
+              Kho câu hỏi <span className={detailStyles.count}>{data.questionCount}</span>
             </h2>
             {data.questionCount > 0 && questionActions}
           </div>

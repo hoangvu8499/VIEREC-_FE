@@ -20,6 +20,10 @@ export const EXAM_FIELD_MESSAGES = {
     required: 'Vui lòng nhập điểm đạt',
     invalid: `Điểm đạt lớn hơn 0, tối đa ${EXAM_MAX_SCORE}, nhiều nhất 2 chữ số sau dấu phẩy`,
   },
+  questionsPerAttempt: {
+    required: 'Vui lòng nhập số câu mỗi đề',
+    invalid: `Số câu mỗi đề là số từ ${R.questionsPerAttemptMin} đến ${R.questionsPerAttemptMax}`,
+  },
 } as const
 
 const optionMessages = (option: string) => ({
@@ -76,17 +80,38 @@ export const examSchema = z.object({
     .pipe(z.string().regex(/^\d{1,2}(\.\d{1,2})?$/, E.passScore.invalid))
     .transform(Number)
     .pipe(z.number().gt(0, E.passScore.invalid).max(EXAM_MAX_SCORE, E.passScore.invalid)),
+  questionsPerAttempt: z
+    .string()
+    .trim()
+    .min(1, { error: E.questionsPerAttempt.required, abort: true })
+    .regex(/^\d+$/, E.questionsPerAttempt.invalid)
+    .transform(Number)
+    .pipe(
+      z
+        .number()
+        .min(R.questionsPerAttemptMin, E.questionsPerAttempt.invalid)
+        .max(R.questionsPerAttemptMax, E.questionsPerAttempt.invalid),
+    ),
 })
 
 export type ExamFormInput = z.input<typeof examSchema>
 export type ExamFormValues = z.output<typeof examSchema>
 
-/** Tạo mới: tên gợi ý theo khoá, 30 phút, đạt 5/10. Sửa: lấy từ bài thi. */
+/**
+ * Tạo mới: tên gợi ý theo khoá, 30 phút, đạt 5/10, 20 câu mỗi đề. Sửa: lấy từ bài thi; bài thi cũ chưa
+ * cài số câu mỗi đề thì gợi ý bằng số câu đang có trong kho (giống cách thi trước đây).
+ */
 export function examFormValues(exam: Exam | undefined, courseName: string): ExamFormInput {
+  const perAttempt =
+    exam?.questionsPerAttempt ??
+    (exam && exam.questionCount > 0
+      ? Math.min(exam.questionCount, R.questionsPerAttemptMax)
+      : R.questionsPerAttemptDefault)
   return {
     title: exam?.title ?? `Bài thi chứng chỉ – ${courseName}`.slice(0, R.titleMax),
     durationMinutes: String(exam?.durationMinutes ?? 30),
     passScore: (exam?.passScore ?? 5).toLocaleString('vi-VN', { maximumFractionDigits: 2 }),
+    questionsPerAttempt: String(perAttempt),
   }
 }
 

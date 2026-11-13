@@ -27,6 +27,7 @@ const EXAM: Exam = {
   durationMinutes: 30,
   passScore: 5,
   questionCount: 2,
+  questionsPerAttempt: 2,
   questions: [
     QUESTION,
     { ...QUESTION, id: 12, content: 'Bình chữa cháy CO2 dùng cho đám cháy nào?', sortOrder: 2 },
@@ -76,9 +77,52 @@ describe('ExamPage (bài thi chứng chỉ)', () => {
       title: `Bài thi chứng chỉ – ${COURSE_DETAIL_FIXTURE.name}`,
       durationMinutes: 30,
       passScore: 7.5,
+      questionsPerAttempt: 20,
     })
     expect(await screen.findByText(/^Đã tạo bài thi/)).toBeInTheDocument()
     expect(await screen.findByText('Bài thi chưa có câu hỏi')).toBeVisible()
+  })
+
+  it('sets how many questions are drawn for each learner and warns while the bank is too small', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(examService, 'get').mockResolvedValue(EXAM)
+    const save = vi
+      .spyOn(examService, 'save')
+      .mockResolvedValue({ ...EXAM, questionsPerAttempt: 5 })
+    renderPage()
+
+    expect(await screen.findByText('2 câu, bốc ngẫu nhiên từ kho')).toBeInTheDocument()
+    expect(screen.queryByText('Kho chưa đủ câu hỏi')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Sửa' }))
+    const perAttempt = screen.getByRole('textbox', { name: label('Số câu mỗi đề') })
+    await user.clear(perAttempt)
+    await user.type(perAttempt, '0')
+    await user.click(screen.getByRole('button', { name: 'Lưu cài đặt' }))
+    expect(screen.getByText('Số câu mỗi đề là số từ 1 đến 500')).toBeInTheDocument()
+    expect(save).not.toHaveBeenCalled()
+
+    await user.clear(perAttempt)
+    await user.type(perAttempt, '5')
+    await user.click(screen.getByRole('button', { name: 'Lưu cài đặt' }))
+    expect(save).toHaveBeenCalledWith(
+      COURSE_DETAIL_FIXTURE.id,
+      expect.objectContaining({ questionsPerAttempt: 5 }),
+    )
+    expect(await screen.findByText('5 câu, bốc ngẫu nhiên từ kho')).toBeInTheDocument()
+    expect(screen.getByText('Kho chưa đủ câu hỏi')).toBeInTheDocument()
+    expect(screen.getByText(/Thêm ít nhất 3 câu nữa/)).toBeInTheDocument()
+    expect(screen.getByText('Cần đúng ít nhất 3/5 câu để đạt')).toBeInTheDocument()
+  })
+
+  it('suggests the bank size for an exam set up before random papers', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(examService, 'get').mockResolvedValue({ ...EXAM, questionsPerAttempt: null })
+    renderPage()
+
+    expect(await screen.findByText('Toàn bộ kho (2 câu)')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Sửa' }))
+    expect(screen.getByRole('textbox', { name: label('Số câu mỗi đề') })).toHaveValue('2')
   })
 
   it('rejects a pass score above 10', async () => {

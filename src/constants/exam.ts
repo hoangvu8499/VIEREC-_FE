@@ -26,6 +26,10 @@ export const EXAM_RULES = {
   titleMax: 200,
   durationMin: 1,
   durationMax: 300,
+  questionsPerAttemptMin: 1,
+  questionsPerAttemptMax: 500,
+  /** Gợi ý khi tạo bài thi mới. */
+  questionsPerAttemptDefault: 20,
   contentMax: 5000,
   optionMax: 1000,
   importMaxQuestions: 500,

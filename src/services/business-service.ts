@@ -7,6 +7,7 @@ import type {
   BusinessManagerPayload,
   BusinessMember,
   BusinessMemberDetail,
+  BusinessMemberImportResult,
   BusinessMemberSearchParams,
   BusinessPayload,
   BusinessSearchParams,
@@ -88,6 +89,24 @@ export const myBusinessService = {
   /** Tạo tài khoản học viên trong doanh nghiệp: cùng field và luật với đăng ký. */
   async createMember(payload: RegisterPayload): Promise<BusinessMember> {
     const { data } = await http.post<ApiResponse<BusinessMember>>('/my-business/members', payload)
+    return data.data
+  },
+
+  /**
+   * Tạo nhiều tài khoản học viên từ file Excel, tất cả dùng `defaultPassword`. Một dòng sai là không tạo
+   * tài khoản nào: 400 `MEMBER_IMPORT_INVALID_ROWS`, `fieldErrors` dạng `rows[<dòng Excel>].<field>`.
+   */
+  async importMembers(file: File, defaultPassword: string): Promise<BusinessMemberImportResult> {
+    const form = new FormData()
+    form.append('file', file)
+    form.append('defaultPassword', defaultPassword)
+    const { data } = await http.post<ApiResponse<BusinessMemberImportResult>>(
+      '/my-business/members/import',
+      form,
+      // Instance mặc định là JSON — axios sẽ đổi FormData thành JSON nếu không ghi đè.
+      // Không giới hạn thời gian: 500 dòng mất vài giây ở server.
+      { headers: { 'Content-Type': 'multipart/form-data' }, timeout: 0 },
+    )
     return data.data
   },
 
